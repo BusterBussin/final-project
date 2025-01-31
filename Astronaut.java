@@ -1,5 +1,3 @@
-import java.text.DecimalFormat;
-
 public class Astronaut {
     String name;
     String dob;
@@ -69,7 +67,7 @@ public class Astronaut {
 
     public void setWeight (double weight) {
         this.weight = weight;
-        formattedWeight = String.format("%.2f kgs");
+        formattedWeight = String.format("%.2f lbs");
     }
 
     public void setKin (String kin) {
