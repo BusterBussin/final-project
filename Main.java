@@ -71,7 +71,7 @@ public class Main {
                             System.out.println("Enter payrate (In form 0.00)");
                             rate = scan.nextDouble();
                             scan.nextLine();
-                            System.out.println("Enter weight (In form 0.00, in kg)");
+                            System.out.println("Enter weight (In form 0.00, in pounds)");
                             weight = scan.nextDouble();
                             scan.nextLine();
                             System.out.println("Enter next of kin's name");

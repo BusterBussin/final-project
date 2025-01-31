@@ -9,7 +9,7 @@ public class Spaceship {
         this.fuelCap = fuelCap;
         currentFuel = 0;
     }
-
+    
     public String refuel(double amount) {
         if(currentFuel + amount <= fuelCap) {
             currentFuel = currentFuel + amount;
