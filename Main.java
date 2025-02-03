@@ -99,7 +99,7 @@ public class Main {
                             System.out.println("Astronaut added successfully!");
                             break;
                         case 'B':
-                            for(int i = 0; i < astros.size(); i++) {
+                            for (int i = 0; i < astros.size(); i++) {
                                 System.out.println("Astronaut " + astros.size());
                                 System.out.println(astros.get(i));
                             }
@@ -107,38 +107,92 @@ public class Main {
                         case 'C':
                             System.out.println("Enter the name of the astronaut. Type cancel to cancel.");
                             input = scan.nextLine();
-                            if(input.equalsIgnoreCase("cancel")) {
+                            if (input.equalsIgnoreCase("cancel")) {
                                 break;
                             }
                             for (Astronaut astro : astros) {
                                 if (astro.getName().equalsIgnoreCase(input)) {
+                                    while (option != 'Z') {
                                     System.out.println("Editing astronaut: " + astro.getName());
                                     System.out.println("Select what to change.");
-                                    System.out.println("A) Name\nB) Date of Birth\nC) Serial\nD) Address\nE) Email\nF) Phone Number\nG)Pay Rate\nH) Weight\nI) Kin\nF) Status\nZ) Quit");
+                                    System.out.println(
+                                            "A) Name\nB) Date of Birth\nC) Serial\nD) Address\nE) Email\nF) Phone Number\nG)Pay Rate\nH) Weight\nI) Kin\nF) Status\nZ) Quit");
                                     option = scan.nextLine().toUpperCase().charAt(0);
-                                    switch(option) {
+                                    switch (option) {
                                         case 'A':
                                             System.out.println("Enter new name");
                                             name = scan.nextLine();
                                             astro.setName(name);
+                                            option = ' ';
                                             break;
                                         case 'B':
                                             System.out.print("Enter new DOB (preferred in 2000-01-01)");
                                             dob = scan.nextLine();
                                             astro.setDOB(dob);
+                                            option = ' ';
                                             break;
                                         case 'C':
                                             System.out.println("Enter new serial");
                                             serial = scan.nextInt();
                                             scan.nextLine();
                                             astro.setSerial(serial);
+                                            option = ' ';
                                             break;
                                         case 'D':
                                             System.out.println("Enter new address");
                                             address = scan.nextLine();
                                             astro.setAddress(address);
+                                            option = ' ';
                                             break;
-                                        // note to self: do this
+                                        case 'E':
+                                            System.out.println("Enter email.");
+                                            email = scan.nextLine();
+                                            while (!email.contains("@")) {
+                                                System.out.println("Invalid email. Enter email.");
+                                                email = scan.nextLine();
+                                            }
+                                            astro.setEmail(email);
+                                            option = ' ';
+                                            break;
+                                        case 'F':
+                                            System.out.println(
+                                                    "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
+                                            numCheck = scan.nextLine();
+                                            while (!numCheck.matches("\\d{10}")) {
+                                                System.out.println("Invalid number. Please enter a valid phone number");
+                                                numCheck = scan.nextLine();
+                                            }
+                                            number = Long.parseLong(numCheck);
+                                            astro.setPhone(number);
+                                            option = ' ';
+                                            break;
+                                        case 'G':
+                                            System.out.println("Enter payrate (In form 0.00)");
+                                            rate = scan.nextDouble();
+                                            scan.nextLine();
+                                            astro.setRate(rate);
+                                            option = ' ';
+                                            break;
+                                        case 'H':
+                                            System.out.println("Enter weight (In form 0.00, in pounds)");
+                                            weight = scan.nextDouble();
+                                            scan.nextLine();
+                                            astro.setWeight(weight);
+                                            option = ' ';
+                                            break;
+                                        case 'I':
+                                            System.out.println("Enter next of kin's name");
+                                            kin = scan.nextLine();
+                                            astro.setKin(kin);
+                                            option = ' ';
+                                        case 'Z':
+                                            System.out.println("Returning to main menu");
+                                            break;
+                                        default:
+                                            System.out.println("invalid input.");
+                                            option = ' ';
+                                            break;
+                                    }
                                     }
                                 }
                             }

@@ -55,7 +55,7 @@ public class Astronaut {
         this.email = email;
     }
 
-    public void setPhone (int number) {
+    public void setPhone (long number) {
         this.number = number;
         phoneNum = String.format("(%03d)%03d-%04d",
                 number / 10000000,
