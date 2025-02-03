@@ -4,7 +4,7 @@ public class Astronaut {
     int serial;
     String address;
     String email;
-    int number;
+    long number;
     double rate;
     double weight;
     String kin;
@@ -12,8 +12,9 @@ public class Astronaut {
     String phoneNum;
     String formattedRate;
     String formattedWeight;
+    String realRate;
 
-    public Astronaut(String name, String dob, int serial, String address, String email, int number, double rate,
+    public Astronaut(String name, String dob, int serial, String address, String email, long number, double rate,
             double weight, String kin, boolean status) {
         this.name = name;
         this.dob = dob;
@@ -22,8 +23,10 @@ public class Astronaut {
         this.email = email;
         this.number = number;
         this.rate = rate;
-        formattedRate = String.format("%1$,10.2f");
+        formattedRate = String.format("%1$,10.2f", rate);
+        realRate = "$" + formattedRate;
         this.weight = weight;
+        formattedWeight = String.format("%.2f lbs", weight);
         this.kin = kin;
         this.status = status;
         phoneNum = String.format("(%03d)%03d-%04d",
@@ -62,12 +65,13 @@ public class Astronaut {
 
     public void setRate (double rate) {
         this.rate = rate;
-        formattedRate = String.format("$" + "%1$,10.2f");
+        formattedRate = String.format("%1$,10.2f", rate);
+        realRate = "$" + formattedRate;
     }
 
     public void setWeight (double weight) {
         this.weight = weight;
-        formattedWeight = String.format("%.2f lbs");
+        formattedWeight = String.format("%.2f lbs", weight);
     }
 
     public void setKin (String kin) {
@@ -119,5 +123,18 @@ public class Astronaut {
             return "Astronaut is currently in space!";
         }
         return "Astronaut is on Earth";
+    }
+
+    public String toString() {
+        return "Name: " + name + 
+               "\nDOB: " + dob +
+               "\nSerial: " + serial +
+               "\nAddress: " + address +
+               "\nEmail: " + email +
+               "\nPhone: " + phoneNum +
+               "\nPay Rate: " + realRate +
+               "\nWeight: " + formattedWeight +
+               "\nNext of Kin: " + kin +
+               "\nStatus: " + getStatus();
     }
 }

@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 public class Spaceship {
     String shipName;
     double fuelCap;
-    String[] Astronauts;
+    ArrayList<String> astroNames = new ArrayList<>();
     double currentFuel;
 
     public Spaceship(String shipName, double fuelCap) {
