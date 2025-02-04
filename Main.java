@@ -19,6 +19,9 @@ public class Main {
         String kin;
         String shipName;
         double fuelCap;
+        double currentFuel;
+        double remainingSpace;
+        double refuel;
         boolean status = false;
         String numCheck;
         Scanner scan = new Scanner(System.in);
@@ -195,7 +198,7 @@ public class Main {
                                                 break;
                                         }
                                     }
-                                }
+                                } // note to self: add else and cancel options.
                             }
                             break;
                         case 'Z':
@@ -214,6 +217,7 @@ public class Main {
                     System.out.println("Current number of spaceships: " + space.size());
                     System.out.println("Enter what you'd like to do.");
                     System.out.println("A) Add Spaceships");
+                    System.out.println("B) Refuel Ship");
                     System.out.println("Z) Quit");
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
@@ -227,6 +231,37 @@ public class Main {
                             Spaceship newShip = new Spaceship(shipName, fuelCap);
                             space.add(newShip);
                             break;
+                        case 'B':
+                            input = " ";
+                            System.out.println("Enter the name of the spacecraft. Say cancel to cancel.");
+                            input = scan.nextLine();
+                            for (Spaceship ship : space) {
+                                if (ship.getName().equals(input)) {
+                                    shipName = ship.getName();
+                                    currentFuel = ship.getCurrent();
+                                    fuelCap = ship.getCap();
+                                    remainingSpace = fuelCap - currentFuel;
+                                    System.out.println("Now viewing refuel settings for " + shipName);
+                                    System.out.println("Max Capacity: " + fuelCap);
+                                    System.out.println("Current Fuel: " + currentFuel);
+                                    System.out.println("Available space: " + remainingSpace);
+                                    if (remainingSpace == 0) {
+                                        System.out.println("No room left. Cancelling refuel.");
+                                        break;
+                                    } else {
+                                        System.out.println("Enter the amount to refuel.");
+                                        refuel = scan.nextDouble();
+                                        ship.refuel(refuel);
+                                    }
+                                } else if (input.equalsIgnoreCase("cancel")) {
+                                    System.out.println("Cancelling.");
+                                    break;
+                                } else {
+                                    System.out.println("No name found. Try again.");
+                                    break;
+                                }
+                                }
+                            
                         case 'Z':
                             System.out.println("Returning to the main menu.");
                             break;
