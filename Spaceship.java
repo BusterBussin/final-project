@@ -33,4 +33,22 @@ public class Spaceship {
     public double getCurrent() {
         return currentFuel;
     }
+
+    public void addAstro(String name) {
+        astroNames.add(name);
+    }
+
+    public void showAstro() {
+        System.out.println("Astronauts: " + astroNames.size());
+        for (int i = 0; i < astroNames.size(); i++) {
+            System.out.println(astroNames.get(i));
+        }
+    }
+
+    public void fullShow() {
+        System.out.println("Name: " + getName());
+        System.out.println("Fuel Capacity: " + getCap());
+        System.out.println("Current Fuel: " + getCurrent());
+        showAstro();
+    }
 }

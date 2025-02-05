@@ -43,6 +43,7 @@ public class Main {
             while (option == 'A') {
                 option = ' ';
                 while (option != 'Z') {
+                    found = false;
                     System.out.println("Current number of astronauts: " + astros.size());
                     System.out.println("Select what to do");
                     System.out.println("A) Add Astroanuts");
@@ -111,94 +112,99 @@ public class Main {
                             System.out.println("Enter the name of the astronaut. Type cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
-                                break;
-                            }
-                            for (Astronaut astro : astros) {
-                                if (astro.getName().equalsIgnoreCase(input)) {
-                                    while (option != 'Z') {
-                                        System.out.println("Editing astronaut: " + astro.getName());
-                                        System.out.println("Select what to change.");
-                                        System.out.println(
-                                                "A) Name\nB) Date of Birth\nC) Serial\nD) Address\nE) Email\nF) Phone Number\nG)Pay Rate\nH) Weight\nI) Kin\nF) Status\nZ) Quit");
-                                        option = scan.nextLine().toUpperCase().charAt(0);
-                                        switch (option) {
-                                            case 'A':
-                                                System.out.println("Enter new name");
-                                                name = scan.nextLine();
-                                                astro.setName(name);
-                                                option = ' ';
-                                                break;
-                                            case 'B':
-                                                System.out.print("Enter new DOB (preferred in 2000-01-01)");
-                                                dob = scan.nextLine();
-                                                astro.setDOB(dob);
-                                                option = ' ';
-                                                break;
-                                            case 'C':
-                                                System.out.println("Enter new serial");
-                                                serial = scan.nextInt();
-                                                scan.nextLine();
-                                                astro.setSerial(serial);
-                                                option = ' ';
-                                                break;
-                                            case 'D':
-                                                System.out.println("Enter new address");
-                                                address = scan.nextLine();
-                                                astro.setAddress(address);
-                                                option = ' ';
-                                                break;
-                                            case 'E':
-                                                System.out.println("Enter email.");
-                                                email = scan.nextLine();
-                                                while (!email.contains("@")) {
-                                                    System.out.println("Invalid email. Enter email.");
+                                System.out.println("Cancelling.");
+                                found = true;
+                            } else {
+                                for (Astronaut astro : astros) {
+                                    if (astro.getName().equalsIgnoreCase(input)) {
+                                        found = true;
+                                        while (option != 'Z') {
+                                            System.out.println("Editing astronaut: " + astro.getName());
+                                            System.out.println("Select what to change.");
+                                            System.out.println(
+                                                    "A) Name\nB) Date of Birth\nC) Serial\nD) Address\nE) Email\nF) Phone Number\nG)Pay Rate\nH) Weight\nI) Kin\nF) Status\nZ) Quit");
+                                            option = scan.nextLine().toUpperCase().charAt(0);
+                                            switch (option) {
+                                                case 'A':
+                                                    System.out.println("Enter new name");
+                                                    name = scan.nextLine();
+                                                    astro.setName(name);
+                                                    option = ' ';
+                                                    break;
+                                                case 'B':
+                                                    System.out.print("Enter new DOB (preferred in 2000-01-01)");
+                                                    dob = scan.nextLine();
+                                                    astro.setDOB(dob);
+                                                    option = ' ';
+                                                    break;
+                                                case 'C':
+                                                    System.out.println("Enter new serial");
+                                                    serial = scan.nextInt();
+                                                    scan.nextLine();
+                                                    astro.setSerial(serial);
+                                                    option = ' ';
+                                                    break;
+                                                case 'D':
+                                                    System.out.println("Enter new address");
+                                                    address = scan.nextLine();
+                                                    astro.setAddress(address);
+                                                    option = ' ';
+                                                    break;
+                                                case 'E':
+                                                    System.out.println("Enter email.");
                                                     email = scan.nextLine();
-                                                }
-                                                astro.setEmail(email);
-                                                option = ' ';
-                                                break;
-                                            case 'F':
-                                                System.out.println(
-                                                        "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
-                                                numCheck = scan.nextLine();
-                                                while (!numCheck.matches("\\d{10}")) {
+                                                    while (!email.contains("@")) {
+                                                        System.out.println("Invalid email. Enter email.");
+                                                        email = scan.nextLine();
+                                                    }
+                                                    astro.setEmail(email);
+                                                    option = ' ';
+                                                    break;
+                                                case 'F':
                                                     System.out.println(
-                                                            "Invalid number. Please enter a valid phone number");
+                                                            "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
                                                     numCheck = scan.nextLine();
-                                                }
-                                                number = Long.parseLong(numCheck);
-                                                astro.setPhone(number);
-                                                option = ' ';
-                                                break;
-                                            case 'G':
-                                                System.out.println("Enter payrate (In form 0.00)");
-                                                rate = scan.nextDouble();
-                                                scan.nextLine();
-                                                astro.setRate(rate);
-                                                option = ' ';
-                                                break;
-                                            case 'H':
-                                                System.out.println("Enter weight (In form 0.00, in pounds)");
-                                                weight = scan.nextDouble();
-                                                scan.nextLine();
-                                                astro.setWeight(weight);
-                                                option = ' ';
-                                                break;
-                                            case 'I':
-                                                System.out.println("Enter next of kin's name");
-                                                kin = scan.nextLine();
-                                                astro.setKin(kin);
-                                                option = ' ';
-                                            case 'Z':
-                                                System.out.println("Returning to main menu");
-                                                break;
-                                            default:
-                                                System.out.println("invalid input.");
-                                                option = ' ';
-                                                break;
+                                                    while (!numCheck.matches("\\d{10}")) {
+                                                        System.out.println(
+                                                                "Invalid number. Please enter a valid phone number");
+                                                        numCheck = scan.nextLine();
+                                                    }
+                                                    number = Long.parseLong(numCheck);
+                                                    astro.setPhone(number);
+                                                    option = ' ';
+                                                    break;
+                                                case 'G':
+                                                    System.out.println("Enter payrate (In form 0.00)");
+                                                    rate = scan.nextDouble();
+                                                    scan.nextLine();
+                                                    astro.setRate(rate);
+                                                    option = ' ';
+                                                    break;
+                                                case 'H':
+                                                    System.out.println("Enter weight (In form 0.00, in pounds)");
+                                                    weight = scan.nextDouble();
+                                                    scan.nextLine();
+                                                    astro.setWeight(weight);
+                                                    option = ' ';
+                                                    break;
+                                                case 'I':
+                                                    System.out.println("Enter next of kin's name");
+                                                    kin = scan.nextLine();
+                                                    astro.setKin(kin);
+                                                    option = ' ';
+                                                case 'Z':
+                                                    System.out.println("Returning to main menu");
+                                                    break;
+                                                default:
+                                                    System.out.println("invalid input.");
+                                                    option = ' ';
+                                                    break;
+                                            }
                                         }
-                                    }
-                                } // note to self: add else and cancel options.
+                                    } 
+                                }
+                            } if (!found) {
+                                System.out.println("Astronaut not found, please check for typos.");
                             }
                             break;
                         case 'Z':
@@ -214,10 +220,13 @@ public class Main {
             while (option == 'B') {
                 option = ' ';
                 while (option != 'Z') {
+                    found = false;
                     System.out.println("Current number of spaceships: " + space.size());
                     System.out.println("Enter what you'd like to do.");
                     System.out.println("A) Add Spaceships");
                     System.out.println("B) Refuel Ship");
+                    System.out.println("C) Add Astronaut to Ship");
+                    System.out.println("D) Show Info");
                     System.out.println("Z) Quit");
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
@@ -236,7 +245,8 @@ public class Main {
                             System.out.println("Enter the name of the spacecraft. Say cancel to cancel.");
                             input = scan.nextLine();
                             for (Spaceship ship : space) {
-                                if (ship.getName().equals(input)) {
+                                if (ship.getName().equalsIgnoreCase(input)) {
+                                    found = true;
                                     shipName = ship.getName();
                                     currentFuel = ship.getCurrent();
                                     fuelCap = ship.getCap();
@@ -252,6 +262,7 @@ public class Main {
                                         System.out.println("Enter the amount to refuel.");
                                         refuel = scan.nextDouble();
                                         ship.refuel(refuel);
+                                        break;
                                     }
                                 } else if (input.equalsIgnoreCase("cancel")) {
                                     System.out.println("Cancelling.");
@@ -260,8 +271,53 @@ public class Main {
                                     System.out.println("No name found. Try again.");
                                     break;
                                 }
+                            }
+                        case 'C':
+                            System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
+                            input = scan.nextLine();
+                            if (input.equalsIgnoreCase("cancel")) {
+                                System.out.println("Cancelling.");
+                                break;
+                            }
+                            for (Spaceship ship : space) {
+                                if (ship.getName().equalsIgnoreCase(input)) {
+                                    System.out.println("Ship found. Enter the astronaut name.");
+                                    input = scan.nextLine();
+                                    for (Astronaut astro : astros) {
+                                        if (astro.getName().equalsIgnoreCase(input)) {
+                                            System.out.println("Astronaut found. Adding to ship.");
+                                            ship.addAstro(astro.getName());
+                                            found = true;
+                                        }
+                                    }
                                 }
-                            
+                            }
+                            if (!found) {
+                                System.out.println(
+                                        "Either ship name or astronaut name was not found. Please check for typos and try again.");
+                            }
+                            break;
+                        case 'D':
+                            System.out.println("Enter name of ship, all for all ship info, or cancel to cancel.");
+                            input = scan.nextLine();
+                            if (input.equalsIgnoreCase("cancel")) {
+                                System.out.println("Cancelling.");
+                                break;
+                            } else if (input.equalsIgnoreCase("all")) {
+                                for (Spaceship ship : space) {
+                                    ship.fullShow();
+                                }
+                                break;
+                            } else {
+                                for (Spaceship ship : space) {
+                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                        ship.fullShow();
+                                        break;
+                                    }
+                                }
+                            }
+                            System.out.println("Input does not match with any options. Check for misspells.");
+                            break;
                         case 'Z':
                             System.out.println("Returning to the main menu.");
                             break;
@@ -274,5 +330,6 @@ public class Main {
                 option = ' ';
             }
         }
+        scan.close();
     }
 }
