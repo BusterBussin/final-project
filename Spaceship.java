@@ -21,4 +21,16 @@ public class Spaceship {
             return "Cannot refuel beyond the spacecraft's fuel capacity.";
         }
     }
+
+    public String getName() {
+        return shipName;
+    }
+
+    public double getCap() {
+        return fuelCap;
+    }
+
+    public double getCurrent() {
+        return currentFuel;
+    }
 }
