@@ -11,13 +11,12 @@ public class Spaceship {
         this.fuelCap = fuelCap;
         currentFuel = 0;
     }
-    
+
     public String refuel(double amount) {
-        if(currentFuel + amount <= fuelCap) {
+        if (currentFuel + amount <= fuelCap) {
             currentFuel = currentFuel + amount;
             return shipName + " has been refueled. Current fuel level: " + currentFuel + " liters. ";
-        }
-        else {
+        } else {
             return "Cannot refuel beyond the spacecraft's fuel capacity.";
         }
     }
@@ -49,6 +48,10 @@ public class Spaceship {
         System.out.println("Name: " + getName());
         System.out.println("Fuel Capacity: " + getCap());
         System.out.println("Current Fuel: " + getCurrent());
-        showAstro();
+        if (astroNames.size() == 0) {
+            System.out.println("No astronauts assigned to ship.");
+        } else {
+            showAstro();
+        }
     }
 }
