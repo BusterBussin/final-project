@@ -15,8 +15,32 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+
     public static void main(String args[]) {
         connect();
+        String url = "jdbc:sqlite:my.db";
+        var sql = "CREATE TABLE IF NOT EXISTS warehouses (" +
+                "	id INTEGER PRIMARY KEY," +
+                "	name text NOT NULL," +
+                "	capacity REAL" +
+                ");";
+
+        try (var conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                var meta = conn.getMetaData();
+                System.out.println("The driver name is " + meta.getDriverName());
+                System.out.println("A new database has been created.");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        try (var conn = DriverManager.getConnection(url);
+             var stmt = conn.createStatement()) {
+            // create a new table
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         String password = "greenbeaneatingmachine";
         String inputPassword = "a";
         char option = 'A';
@@ -215,9 +239,10 @@ public class Main {
                                                     break;
                                             }
                                         }
-                                    } 
+                                    }
                                 }
-                            } if (!found) {
+                            }
+                            if (!found) {
                                 System.out.println("Astronaut not found, please check for typos.");
                             }
                             break;
