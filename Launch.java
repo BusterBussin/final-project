@@ -18,4 +18,12 @@ public class Launch {
             }
         }, 0, 1000);
     }
+    double speed;
+    double altitude;
+    public void spacewalk() {
+        if(altitude > 70000) {
+            //start 30 second timer
+            
+        }
+    }
 }
