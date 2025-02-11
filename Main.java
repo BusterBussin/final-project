@@ -64,7 +64,8 @@ public class Main {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        String password = "greenbeaneatingmachine";
+        var sqlInput = " ";
+        int password = 573219;
         String inputPassword = "a";
         int attempts = 0;
         char option = 'A';
