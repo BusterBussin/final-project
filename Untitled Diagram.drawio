@@ -1,0 +1,140 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0" version="26.0.11">
+  <diagram name="Page-1" id="_FvwbVaUWl75vb9HS1EQ">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="&lt;pre&gt;,-----------------------------.                         ,---------------------------------------------.&#xa;|UserAuthentication           |                         |Validation                                   |&#xa;|-----------------------------|  ,------------------.   |---------------------------------------------|&#xa;|- userPassword: String       |  |DataStorage       |   |+ validateEmail(email: String): boolean      |&#xa;|- adminPassword: String      |  |------------------|   |+ validatePhoneNumber(phone: String): boolean|&#xa;|+ createPassword(): String   |  |+ loadData(): void|   |+ validatePayRate(rate: double): boolean     |&#xa;|+ validatePassword(): boolean|  |+ saveData(): void|   |+ validateWeight(weight: double): boolean    |&#xa;|+ resetAdminPassword(): void |  `------------------&#39;   |+ confirmDeletion(): boolean                 |&#xa;`-----------------------------&#39;                         `---------------------------------------------&#39;&#xa;                                                                                                       &#xa;                                                                                                       &#xa;            ,-------------------------.                                                                &#xa;            |Astronaut                |                                                                &#xa;            |-------------------------|                                                                &#xa;            |- name: String           |                                                                &#xa;            |- birthDate: Date        |                                                                &#xa;            |- serialNumber: int      |                                                                &#xa;            |- address: String        |                                                                &#xa;            |- email: String          |                                                                &#xa;            |- phoneNumber: String    |                                                                &#xa;            |- payRate: double        |                                                                &#xa;            |- weight: double         |                                                                &#xa;            |- nextOfKin: String      |                                                                &#xa;            |- status: String         |                                                                &#xa;            |+ addAstronaut(): void   |                                                                &#xa;            |+ editAstronaut(): void  |                                                                &#xa;            |+ removeAstronaut(): void|                                                                &#xa;            `-------------------------&#39;                                                                &#xa;                                                                                                       &#xa;       ,-----------------------------------------------------.                                         &#xa;       |Spaceship                                            |                                         &#xa;       |-----------------------------------------------------|                                         &#xa;       |- shipName: String                                   |                                         &#xa;       |- fuelCapacity: double                               |                                         &#xa;       |- astronauts: List&lt;Astronaut&gt;                        |                                         &#xa;       |- currentFuel: double                                |                                         &#xa;       |+ addSpaceship(): void                               |                                         &#xa;       |+ loadFuel(amount: double): void                     |                                         &#xa;       |+ assignAstronauts(astronauts: List&lt;Astronaut&gt;): void|                                         &#xa;       `-----------------------------------------------------&#39;                                         &#xa;                                  |                                                                    &#xa;                                                                                                       &#xa;                    ,--------------------------.                                                       &#xa;                    |LaunchProcess             |                                                       &#xa;                    |--------------------------|                                                       &#xa;                    |- countdown: int          |                                                       &#xa;                    |- fuelBurnRate: double    |                                                       &#xa;                    |- speedIncrease: double   |                                                       &#xa;                    |+ countdownLaunch(): void |                                                       &#xa;                    |+ calculateSpeed(): double|                                                       &#xa;                    |+ performSpaceWalk(): void|                                                       &#xa;                    |+ returnToEarth(): void   |                                                       &#xa;                    |+ checkLanding(): void    |                                                       &#xa;                    `--------------------------&#39;                                                       &#xa;&lt;/pre&gt;" plantUmlData="{&quot;data&quot;:&quot;@startuml\n\nclass UserAuthentication {\n    - userPassword: String\n    - adminPassword: String\n    + createPassword(): String\n    + validatePassword(): boolean\n    + resetAdminPassword(): void\n}\n\nclass Astronaut {\n    - name: String\n    - birthDate: Date\n    - serialNumber: int\n    - address: String\n    - email: String\n    - phoneNumber: String\n    - payRate: double\n    - weight: double\n    - nextOfKin: String\n    - status: String\n    + addAstronaut(): void\n    + editAstronaut(): void\n    + removeAstronaut(): void\n}\n\nclass Spaceship {\n    - shipName: String\n    - fuelCapacity: double\n    - astronauts: List&lt;Astronaut&gt;\n    - currentFuel: double\n    + addSpaceship(): void\n    + loadFuel(amount: double): void\n    + assignAstronauts(astronauts: List&lt;Astronaut&gt;): void\n}\n\nclass LaunchProcess {\n    - countdown: int\n    - fuelBurnRate: double\n    - speedIncrease: double\n    + countdownLaunch(): void\n    + calculateSpeed(): double\n    + performSpaceWalk(): void\n    + returnToEarth(): void\n    + checkLanding(): void\n}\n\nclass DataStorage {\n    + loadData(): void\n    + saveData(): void\n}\n\nclass Validation {\n    + validateEmail(email: String): boolean\n    + validatePhoneNumber(phone: String): boolean\n    + validatePayRate(rate: double): boolean\n    + validateWeight(weight: double): boolean\n    + confirmDeletion(): boolean\n}\n\nUserAuthentication -- Astronaut\nAstronaut -- Spaceship\nSpaceship -- LaunchProcess\nDataStorage -- Astronaut\nDataStorage -- Spaceship\n\n@enduml\n&quot;,&quot;format&quot;:&quot;txt&quot;}" id="vNZt6eVFuWHwacnN8OHr-1">
+          <mxCell style="text;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+            <mxGeometry x="95" y="200" width="700" height="820" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-13" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="370" as="sourcePoint" />
+            <mxPoint x="410" y="310" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="300" as="sourcePoint" />
+            <mxPoint x="470" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-18" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="290" as="sourcePoint" />
+            <mxPoint x="320" y="290" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-20" value="" style="endArrow=none;dashed=1;html=1;rounded=0;exitX=0.114;exitY=0.561;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="339.99999999999994" y="640.02" as="sourcePoint" />
+            <mxPoint x="340" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-22" value="astronaut" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="625" y="520" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-23" value="" style="triangle;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="610" y="550" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-24" value="" style="shape=dataStorage;whiteSpace=wrap;html=1;fixedSize=1;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="590" y="610" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-26" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-25;fillColor=light-dark(#FF9933,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="635" y="740" width="60" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-27" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-15;fillColor=light-dark(#FF3333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="595" y="750" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-30" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.sun;fillColor=light-dark(#FFEF2A,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="720" y="380" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-31" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.6_point_star;rotation=15;fillColor=light-dark(#FFEF2A,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="700" y="830" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-33" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.4_point_star_2;dx=0.8;rotation=60;strokeColor=light-dark(#E7FF32,#FFFFFF);fillColor=light-dark(#F1FF86,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="10" y="440" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-35" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.8_point_star;rotation=-15;strokeColor=light-dark(#FFEF2A,#FFFFFF);fillColor=light-dark(#FEFF75,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="70" y="830" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-36" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.8_point_star;rotation=25;strokeColor=light-dark(#E7FF32,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="720" y="560" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-37" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.6_point_star;rotation=15;fillColor=light-dark(#E7FF32,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="20" y="150" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-38" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.4_point_star_2;dx=0.8;rotation=30;strokeColor=light-dark(#FFEF2A,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="560" y="350" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-39" value="LAUNCH" style="labelPosition=center;verticalLabelPosition=middle;align=center;html=1;shape=mxgraph.basic.shaded_button;dx=10;fillColor=#E6E6E6;strokeColor=none;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="440" y="870" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-40" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.tick;fillColor=light-dark(#23FF1C,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="525" y="120" width="85" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-41" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.x;fillColor=light-dark(#FF0000,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="650" y="120" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-47" value="" style="shape=switch;whiteSpace=wrap;html=1;strokeColor=light-dark(#FEFF75,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="320" y="135" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-48" value="" style="shape=switch;whiteSpace=wrap;html=1;rotation=45;strokeColor=light-dark(#FEFF75,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="320" y="135" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-49" value="" style="shape=switch;whiteSpace=wrap;html=1;rotation=15;fillColor=light-dark(#F9FF51,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="320" y="135" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-51" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.8_point_star;rotation=-15;strokeColor=light-dark(#FFEF2A,#FFFFFF);fillColor=light-dark(#FEFF75,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="425" y="470" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-54" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;rotation=-30;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-60" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;fillColor=light-dark(#999999,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="7" y="590" width="170" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-61" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.half_circle;rotation=-180;fillColor=light-dark(#333333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="41" y="560" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-63" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle" vertex="1" parent="1">
+          <mxGeometry x="680" y="710" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-28" value="" style="shape=dataStorage;whiteSpace=wrap;html=1;fixedSize=1;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="590" y="670" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-65" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="548.45" y="708.45" width="55.62" height="47.5" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-69" value="" style="shape=actor;whiteSpace=wrap;html=1;strokeColor=light-dark(#666666,#FFFFFF);fillColor=light-dark(#000000,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="78.5" y="580" width="25" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-70" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.8_point_star;rotation=45;strokeColor=light-dark(#FFEF2A,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="70" y="830" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-72" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-15;fillColor=light-dark(#FF3333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="605" y="750" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-25" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-30;fillColor=light-dark(#FF9933,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="605" y="740" width="60" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-73" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=0;fillColor=light-dark(#FF3333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="605" y="740" width="35" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-74" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-15;fillColor=light-dark(#FF3333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="635" y="740" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-75" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.flash;rotation=-15;fillColor=light-dark(#FF3333,var(--ge-dark-color, #121212));" vertex="1" parent="1">
+          <mxGeometry x="655" y="740" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vNZt6eVFuWHwacnN8OHr-68" value="" style="rounded=0;whiteSpace=wrap;html=1;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="630" y="710" width="20" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
