@@ -18,12 +18,33 @@ public class Main {
 
     public static void main(String args[]) {
         connect();
-        String url = "jdbc:sqlite:my.db";
-        var sql = "CREATE TABLE IF NOT EXISTS warehouses (" +
-                "	id INTEGER PRIMARY KEY," +
-                "	name text NOT NULL," +
-                "	capacity REAL" +
+        String url = "jdbc:sqlite:spaceprogram.db";
+        var createAstronautTable = "CREATE TABLE IF NOT EXISTS Astronauts (" +
+                "	name text NOT NULL PRIMARY KEY," +
+                "   dob text NOT NULL," +
+                "   serial INTEGER NOT NULL," +
+                "   phone text NOT NULL," +
+                "   address text NOT NULL," +
+                "   email text NOT NULL," +
+                "   rate REAL NOT NULL," +
+                "   weight REAL NOT NULL," +
+                "   kin text NOT NULL," +
+                "   status BOOLEAN" +
                 ");";
+
+        var createRocketTable = "CREATE TABLE IF NOT EXISTS Rockets (" +
+                "	name text NOT NULL PRIMARY KEY," +
+                "   maxFuel REAL NOT NULL," +
+                "   currentFuel REAL NOT NULL" +
+                ");";
+
+        var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
+                "   password INTEGER NOT NULL PRIMARY KEY," +
+                "   logins INTEGER NOT NULL" +
+                ");";
+        
+        // var getAllAstronauts = "SELECT * FROM Astronauts;";
+        //var getAstronautByEmail = "SELECT * Astronauts WHERE email = 'kruskiej@baisd.net'";
 
         try (var conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -35,14 +56,17 @@ public class Main {
             System.err.println(e.getMessage());
         }
         try (var conn = DriverManager.getConnection(url);
-             var stmt = conn.createStatement()) {
+                var stmt = conn.createStatement()) {
             // create a new table
-            stmt.execute(sql);
+            stmt.execute(createAstronautTable);
+            stmt.execute(createRocketTable);
+            stmt.execute(createGeneralTable);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         String password = "greenbeaneatingmachine";
         String inputPassword = "a";
+        int attempts = 0;
         char option = 'A';
         String input;
         boolean found = false;
