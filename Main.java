@@ -7,7 +7,7 @@ public class Main {
 
     public static void connect() {
         // connection string
-        var url = "jdbc:sqlite:c:/sqlite/db/chinook.db";
+        var url = "jdbc:sqlite:spaceprogram.db";
 
         try (var conn = DriverManager.getConnection(url)) {
             System.out.println("Connection to SQLite has been established.");
@@ -49,8 +49,6 @@ public class Main {
         try (var conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 var meta = conn.getMetaData();
-                System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -66,7 +64,7 @@ public class Main {
         }
         var sqlInput = " ";
         int password = 573219;
-        String inputPassword = "a";
+        int inputPassword = 0;
         int attempts = 0;
         char option = 'A';
         String input;
@@ -90,10 +88,11 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
-        while (!inputPassword.equals(password)) {
+        while (inputPassword != password) {
             System.out.println("Please enter the password.");
-            inputPassword = scan.nextLine();
-            if (!inputPassword.equals(password)) {
+            inputPassword = scan.nextInt();
+            scan.nextLine();
+            if (inputPassword != password) {
                 System.out.println("That's the wrong password.");
             }
         }

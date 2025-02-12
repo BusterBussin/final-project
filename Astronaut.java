@@ -1,4 +1,8 @@
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class Astronaut {
+    String url = "jdbc:sqlite:spaceprogram.db";
     String name;
     String dob;
     int serial;
@@ -13,6 +17,7 @@ public class Astronaut {
     String formattedRate;
     String formattedWeight;
     String realRate;
+    String sqlInput;
 
     public Astronaut(String name, String dob, int serial, String address, String email, long number, double rate,
             double weight, String kin, boolean status) {
@@ -33,6 +38,27 @@ public class Astronaut {
                 number / 10000000,
                 (number / 10000) % 1000,
                 number % 10000);
+        String sqlThing = "SELECT * FROM Astronauts;";
+        sqlInput = "INSERT INTO Astronauts(name,dob,serial,phone,address,email,rate,weight,kin,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+         try (var conn = DriverManager.getConnection(url);
+             var pstmt = conn.prepareStatement(sqlInput)) {
+                pstmt.setString(1, name);
+                pstmt.setString(2, dob);
+                pstmt.setInt(3, serial);
+                pstmt.setString(4, phoneNum);
+                pstmt.setString(5, address);
+                pstmt.setString(6, email);
+                pstmt.setDouble(7, rate);
+                pstmt.setDouble(8, weight);
+                pstmt.setString(9, kin);
+                pstmt.setBoolean(10, status);
+                pstmt.executeUpdate();
+            
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public void setName(String name) {
