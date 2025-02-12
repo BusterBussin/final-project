@@ -23,7 +23,7 @@ public class Main {
                 "	name text NOT NULL PRIMARY KEY," +
                 "   dob text NOT NULL," +
                 "   serial INTEGER NOT NULL," +
-                "   phone text NOT NULL," +
+                "   phone REAL NOT NULL," +
                 "   address text NOT NULL," +
                 "   email text NOT NULL," +
                 "   rate REAL NOT NULL," +
@@ -32,7 +32,7 @@ public class Main {
                 "   status BOOLEAN" +
                 ");";
 
-        var createRocketTable = "CREATE TABLE IF NOT EXISTS Rockets (" +
+        var createShipTable = "CREATE TABLE IF NOT EXISTS Ships (" +
                 "	name text NOT NULL PRIMARY KEY," +
                 "   maxFuel REAL NOT NULL," +
                 "   currentFuel REAL NOT NULL" +
@@ -43,7 +43,9 @@ public class Main {
                 "   logins INTEGER NOT NULL" +
                 ");";
         
-        // var getAllAstronauts = "SELECT * FROM Astronauts;";
+        var getAllAstronauts = "SELECT * FROM Astronauts;";
+        var getAllSpace = "SELECT * FROM Ships;";
+        var getAllGeneral = "SELECT * FROM General;";
         //var getAstronautByEmail = "SELECT * Astronauts WHERE email = 'kruskiej@baisd.net'";
 
         try (var conn = DriverManager.getConnection(url)) {
@@ -57,11 +59,12 @@ public class Main {
                 var stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(createAstronautTable);
-            stmt.execute(createRocketTable);
+            stmt.execute(createShipTable);
             stmt.execute(createGeneralTable);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        
         var sqlInput = " ";
         int password = 573219;
         int inputPassword = 0;
@@ -88,6 +91,20 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
+        try (var conn = DriverManager.getConnection(url);
+             var stmt = conn.createStatement();
+             var rs = stmt.executeQuery(getAllAstronauts)) {
+
+            while (rs.next()) {
+
+                for (int i = 0; i < rs.getRow(); i++) {
+                    Astronaut loadAstro = new Astronaut(rs);
+                    astros.add(loadAstro);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
         while (inputPassword != password) {
             System.out.println("Please enter the password.");
             inputPassword = scan.nextInt();

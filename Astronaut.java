@@ -1,4 +1,5 @@
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Astronaut {
@@ -19,6 +20,26 @@ public class Astronaut {
     String realRate;
     String sqlInput;
 
+    public Astronaut(ResultSet rs) throws SQLException {
+        name = rs.getString("name");
+        dob = rs.getString("dob");
+        serial = rs.getInt("serial");
+        number = rs.getLong("phone");
+        address = rs.getString("address");
+        email = rs.getString("email");
+        rate = rs.getDouble("rate");
+        formattedRate = String.format("%1$,10.2f", rate);
+        realRate = "$" + formattedRate;
+        weight = rs.getDouble("weight");
+        kin = rs.getString("kin");
+        status = rs.getBoolean("status");
+        phoneNum = String.format("(%03d)%03d-%04d",
+                number / 10000000,
+                (number / 10000) % 1000,
+                number % 10000);
+        formattedWeight = String.format("%.2f lbs", weight);
+    }
+
     public Astronaut(String name, String dob, int serial, String address, String email, long number, double rate,
             double weight, String kin, boolean status) {
         this.name = name;
@@ -38,23 +59,22 @@ public class Astronaut {
                 number / 10000000,
                 (number / 10000) % 1000,
                 number % 10000);
-        String sqlThing = "SELECT * FROM Astronauts;";
+        // String sqlThing = "SELECT * FROM Astronauts;";
         sqlInput = "INSERT INTO Astronauts(name,dob,serial,phone,address,email,rate,weight,kin,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-         try (var conn = DriverManager.getConnection(url);
-             var pstmt = conn.prepareStatement(sqlInput)) {
-                pstmt.setString(1, name);
-                pstmt.setString(2, dob);
-                pstmt.setInt(3, serial);
-                pstmt.setString(4, phoneNum);
-                pstmt.setString(5, address);
-                pstmt.setString(6, email);
-                pstmt.setDouble(7, rate);
-                pstmt.setDouble(8, weight);
-                pstmt.setString(9, kin);
-                pstmt.setBoolean(10, status);
-                pstmt.executeUpdate();
-            
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+            pstmt.setString(1, name);
+            pstmt.setString(2, dob);
+            pstmt.setInt(3, serial);
+            pstmt.setLong(4, number);
+            pstmt.setString(5, address);
+            pstmt.setString(6, email);
+            pstmt.setDouble(7, rate);
+            pstmt.setDouble(8, weight);
+            pstmt.setString(9, kin);
+            pstmt.setBoolean(10, status);
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -63,49 +83,169 @@ public class Astronaut {
 
     public void setName(String name) {
         this.name = name;
+        sqlInput = "INSERT INTO Astronauts(name) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(1, name);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public void setDOB(String dob) {
         this.dob = dob;
+        sqlInput = "INSERT INTO Astronauts(dob) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(2, dob);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setSerial (int serial) {
+    public void setSerial(int serial) {
         this.serial = serial;
+        sqlInput = "INSERT INTO Astronauts(serial) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setInt(3, serial);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setAddress (String address) {
+    public void setAddress(String address) {
         this.address = address;
+        sqlInput = "INSERT INTO Astronauts(address) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(5, address);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setEmail (String email) {
+    public void setEmail(String email) {
         this.email = email;
+        sqlInput = "INSERT INTO Astronauts(email) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(6, email);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setPhone (long number) {
+    public void setPhone(long number) {
         this.number = number;
         phoneNum = String.format("(%03d)%03d-%04d",
                 number / 10000000,
                 (number / 10000) % 1000,
                 number % 10000);
+        sqlInput = "INSERT INTO Astronauts(phone) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(4, phoneNum);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setRate (double rate) {
+    public void setRate(double rate) {
         this.rate = rate;
         formattedRate = String.format("%1$,10.2f", rate);
         realRate = "$" + formattedRate;
+        sqlInput = "INSERT INTO Astronauts(rate) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(7, realRate);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setWeight (double weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
         formattedWeight = String.format("%.2f lbs", weight);
+        sqlInput = "INSERT INTO Astronauts(weight) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(8, formattedWeight);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setKin (String kin) {
+    public void setKin(String kin) {
         this.kin = kin;
+        sqlInput = "INSERT INTO Astronauts(kin) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setString(9, kin);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public void setStatus (boolean status) {
+    public void setStatus(boolean status) {
         this.status = status;
+        sqlInput = "INSERT INTO Astronauts(status) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setBoolean(10, status);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public String getName() {
@@ -152,15 +292,15 @@ public class Astronaut {
     }
 
     public String toString() {
-        return "Name: " + name + 
-               "\nDOB: " + dob +
-               "\nSerial: " + serial +
-               "\nAddress: " + address +
-               "\nEmail: " + email +
-               "\nPhone: " + phoneNum +
-               "\nPay Rate: " + realRate +
-               "\nWeight: " + formattedWeight +
-               "\nNext of Kin: " + kin +
-               "\nStatus: " + getStatus();
+        return "Name: " + name +
+                "\nDOB: " + dob +
+                "\nSerial: " + serial +
+                "\nAddress: " + address +
+                "\nEmail: " + email +
+                "\nPhone: " + phoneNum +
+                "\nPay Rate: " + realRate +
+                "\nWeight: " + formattedWeight +
+                "\nNext of Kin: " + kin +
+                "\nStatus: " + getStatus();
     }
 }
