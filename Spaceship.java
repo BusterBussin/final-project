@@ -1,15 +1,36 @@
 import java.util.ArrayList;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Spaceship {
+    String url = "jdbc:sqlite:spaceprogram.db";
     String shipName;
     double fuelCap;
     ArrayList<String> astroNames = new ArrayList<>();
     double currentFuel;
+    String sqlInput;
+
+    public Spaceship(ResultSet rs) throws SQLException {
+        shipName = rs.getString("name");
+        fuelCap = rs.getDouble("maxFuel");
+        currentFuel = rs.getDouble("currentFuel");
+    }
 
     public Spaceship(String shipName, double fuelCap) {
         this.shipName = shipName;
         this.fuelCap = fuelCap;
         currentFuel = 0;
+        sqlInput = "INSERT INTO Ships(name, maxFuel, currentFuel) VALUES (?, ?, ?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+            pstmt.setString(1, shipName);
+            pstmt.setDouble(2, fuelCap);
+            pstmt.setDouble(3, currentFuel);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
     public String refuel(double amount) {
@@ -34,7 +55,12 @@ public class Spaceship {
     }
 
     public void addAstro(String name) {
-        astroNames.add(name);
+        if (astroNames.size() != 10) {
+            astroNames.add(name);
+        } else {
+            System.out.println("The ship is already at max capacity.");
+        }
+
     }
 
     public void showAstro() {
