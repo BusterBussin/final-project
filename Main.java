@@ -20,7 +20,8 @@ public class Main {
         connect();
         String url = "jdbc:sqlite:spaceprogram.db";
         var createAstronautTable = "CREATE TABLE IF NOT EXISTS Astronauts (" +
-                "	name text NOT NULL PRIMARY KEY," +
+                "   id INTEGER PRIMARY KEY," +
+                "	AstroName text NOT NULL," +
                 "   dob text NOT NULL," +
                 "   serial INTEGER NOT NULL," +
                 "   phone REAL NOT NULL," +
@@ -29,24 +30,30 @@ public class Main {
                 "   rate REAL NOT NULL," +
                 "   weight REAL NOT NULL," +
                 "   kin text NOT NULL," +
-                "   status BOOLEAN" +
+                "   status BOOLEAN," +
+                "   spacecraftID INTEGER" +
                 ");";
 
         var createShipTable = "CREATE TABLE IF NOT EXISTS Ships (" +
-                "	name text NOT NULL PRIMARY KEY," +
+                "   id INTEGER PRIMARY KEY," +
+                "	name text NOT NULL," +
                 "   maxFuel REAL NOT NULL," +
                 "   currentFuel REAL NOT NULL" +
                 ");";
 
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
-                "   password INTEGER NOT NULL PRIMARY KEY," +
+                "   id INTEGER PRIMARY KEY," +
+                "   password INTEGER NOT NULL," +
                 "   logins INTEGER NOT NULL" +
                 ");";
-        
-        var getAllAstronauts = "SELECT * FROM Astronauts;";
-        var getAllSpace = "SELECT * FROM Ships;";
+
+        var addZeroAttempts = "INSERT INTO ..."
+
+        var getAllAstronauts = "SELECT * FROM Astronauts LEFT JOIN Ships ON Astronauts.id=Ships.id;";
+        var getAllSpace = "SELECT * FROM Ships LEFT JOIN Astronauts ON Ships.id=Astronauts.spacecraftID;";
         var getAllGeneral = "SELECT * FROM General;";
-        //var getAstronautByEmail = "SELECT * Astronauts WHERE email = 'kruskiej@baisd.net'";
+        // var getAstronautByEmail = "SELECT * Astronauts WHERE email =
+        // 'kruskiej@baisd.net'";
 
         try (var conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -64,7 +71,6 @@ public class Main {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
         var sqlInput = " ";
         int password = 573219;
         int inputPassword = 0;
@@ -89,21 +95,72 @@ public class Main {
         boolean status = false;
         String numCheck;
         Scanner scan = new Scanner(System.in);
+        // SELECT * FROM Astronauts LEFT JOIN spacecrafts.id on astronauts.spacecraftId;
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
+        // try (var conn = DriverManager.getConnection(url);
+        //         var stmt = conn.createStatement();
+        //         var rs = stmt.executeQuery(getAllAstronauts)) {
+
+        //     while (rs.next()) {
+
+        //         for (int i = 0; i < rs.getRow(); i++) {
+        //             Astronaut loadAstro = new Astronaut(rs);
+        //             astros.add(loadAstro);
+        //         }
+        //     }
+        // } catch (SQLException e) {
+        //     System.err.println(e.getMessage());
+        // }
         try (var conn = DriverManager.getConnection(url);
-             var stmt = conn.createStatement();
-             var rs = stmt.executeQuery(getAllAstronauts)) {
+                var stmt = conn.createStatement();
+                var rs = stmt.executeQuery(getAllAstronauts)) {
 
             while (rs.next()) {
-
                 for (int i = 0; i < rs.getRow(); i++) {
+                    Spaceship loadSpace1 = new Spaceship(rs);
+                    space.add(loadSpace1);
+        
                     Astronaut loadAstro = new Astronaut(rs);
                     astros.add(loadAstro);
                 }
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+        }
+
+        try (var conn = DriverManager.getConnection(url);
+                var stmt = conn.createStatement();
+                var rs = stmt.executeQuery(getAllGeneral)) {
+
+            while (rs.next()) {
+                attempts = rs.getInt("logins");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        for (Spaceship shipLoad : space) {
+            for (Astronaut astroLoad : astros) {
+                if (shipLoad.getID() == astroLoad.getID()) {
+                    shipLoad.addAstro(astroLoad.getName());
+                }
+            }
+        }
+        if (attempts == 0) {
+            System.out.println("The password is 573219. Write this down.");
+            attempts += 1;
+            sqlInput = "INSERT INTO General(logins) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setInt(1, attempts);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
         }
         while (inputPassword != password) {
             System.out.println("Please enter the password.");
@@ -382,21 +439,27 @@ public class Main {
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
                                 System.out.println("Cancelling.");
+                                found = true;
                                 break;
                             } else if (input.equalsIgnoreCase("all")) {
                                 for (Spaceship ship : space) {
                                     ship.fullShow();
                                 }
+                                found = true;
                                 break;
                             } else {
                                 for (Spaceship ship : space) {
                                     if (ship.getName().equalsIgnoreCase(input)) {
                                         ship.fullShow();
+                                        found = true;
                                         break;
+                                        
                                     }
                                 }
                             }
+                            if (!found) {
                             System.out.println("Input does not match with any options. Check for misspells.");
+                            }
                             break;
                         case 'Z':
                             System.out.println("Returning to the main menu.");
@@ -407,9 +470,14 @@ public class Main {
                             break;
                     }
                 }
+                found = false;
                 option = ' ';
             }
         }
         scan.close();
     }
+
+    public static void setAstroShips() {
+        
+    } 
 }
