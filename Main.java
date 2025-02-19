@@ -38,7 +38,17 @@ public class Main {
                 "   id INTEGER PRIMARY KEY," +
                 "	name text NOT NULL," +
                 "   maxFuel REAL NOT NULL," +
-                "   currentFuel REAL NOT NULL" +
+                "   currentFuel REAL NOT NULL," +
+                "   astro1 text," +
+                "   astro2 text," +
+                "   astro3 text," +
+                "   astro4 text," +
+                "   astro5 text," +
+                "   astro6 text," +
+                "   astro7 text," +
+                "   astro8 text," +
+                "   astro9 text," +
+                "   astro10 text" +
                 ");";
 
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +

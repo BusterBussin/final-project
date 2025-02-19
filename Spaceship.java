@@ -76,7 +76,12 @@ public class Spaceship {
     }
 
     public void addAstro(String name) {
-        astroNames.add(name);
+        if (astroNames.size() != 10) {
+            astroNames.add(name);
+        } else {
+            System.out.println("The ship is already at max capacity.");
+        }
+
     }
 
     public void showAstro() {

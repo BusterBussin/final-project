@@ -2,6 +2,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 public class Launch {
+    double blastOff = .9;
+    double blastOffFail = 1 - blastOff;
+
     Timer timer = new Timer();
     int countdownStart = 10;
     public void start() {
@@ -14,8 +17,14 @@ public class Launch {
                     seconds--;
                 } else {
                     timer.cancel();
-                    // for extra credit make an engine failure outcome 10% chance
+                    double randValue = Math.random();
+                    if(randValue < blastOff){
                     System.out.println("Blast off!");
+                    }
+                    else {
+                        System.out.println("Engine failed, try again");
+                        // TODO: make it possile to try again
+                    }
                 }
             }
         }, 0, 1000);
@@ -23,10 +32,26 @@ public class Launch {
 
     double speed;
     double altitude;
-    public void spacewalk() {
-        if(altitude > 70000) {
-            //start 30 second timer
-            
+    double swAlt = 70000;
+    Timer Timer = new Timer();
+    TimerTask missionTask = new TimerTask() {
+        @Override
+        public void run() {
+            System.out.println("Spacewalk complete, spaceship losing altitude.");
+        }
+    };
+    while (altitude <= swAlt) {
+        try{
+            Thread.sleep(1000);
+            altitude += speed;
+            System.out.println("Spaceship altitude: " + altitude + " meters");
+            if(altitude > swAlt) {
+                System.out.println("Spaceship has reached 70000 meters, beginning spacewalk");
+                Timer.schedule(missionTask, 30000);
+            }
+        } catch (InterruptedException e) {
+
         }
     }
 }
+
