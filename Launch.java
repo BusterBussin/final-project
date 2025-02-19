@@ -23,10 +23,26 @@ public class Launch {
 
     double speed;
     double altitude;
-    public void spacewalk() {
-        if(altitude > 70000) {
-            //start 30 second timer
-            
+    double swAlt = 70000;
+    Timer Timer = new Timer();
+    TimerTask missionTask = new TimerTask() {
+        @Override
+        public void run() {
+            System.out.println("Spacewalk complete, spaceship losing altitude.");
+        }
+    };
+    while (altitude <= swAlt) {
+        try{
+            Thread.sleep(1000);
+            altitude += speed;
+            System.out.println("Spaceship altitude: " + altitude + " meters");
+            if(altitude > swAlt) {
+                System.out.println("Spaceship has reached 70000 meters, beginning spacewalk");
+                Timer.schedule(missionTask, 30000);
+            }
+        } catch (InterruptedException e) {
+
         }
     }
 }
+
