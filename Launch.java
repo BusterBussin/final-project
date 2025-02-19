@@ -2,6 +2,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 public class Launch {
+    double blastOff = .9;
+    double blastOffFail = 1 - blastOff;
+
     Timer timer = new Timer();
     int countdownStart = 10;
     public void start() {
@@ -14,8 +17,14 @@ public class Launch {
                     seconds--;
                 } else {
                     timer.cancel();
-                    // for extra credit make an engine failure outcome 10% chance
+                    double randValue = Math.random();
+                    if(randValue < blastOff){
                     System.out.println("Blast off!");
+                    }
+                    else {
+                        System.out.println("Engine failed, try again");
+                        // TODO: make it possile to try again
+                    }
                 }
             }
         }, 0, 1000);
