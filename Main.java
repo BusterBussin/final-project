@@ -428,6 +428,7 @@ public class Main {
                 option = ' ';
                 while (option != 'Z') {
                     found = false;
+                    // spaceship menu
                     System.out.println("Current number of spaceships: " + space.size());
                     System.out.println("Enter what you'd like to do.");
                     System.out.println("A) Add Spaceships");
@@ -436,66 +437,97 @@ public class Main {
                     System.out.println("D) Remove Astronaut");
                     System.out.println("E) Show Info");
                     System.out.println("Z) Quit");
+                    // take input, autoupper at first letter
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
                         case 'A':
+                        // Add spaceship process.
                             System.out.println("Enter the spaceship name.");
                             shipName = scan.nextLine();
                             System.out.println("Enter the fuel cap.");
                             fuelCap = scan.nextInt();
                             scan.nextLine();
                             System.out.println("New spaceship " + shipName + " created.");
+                            // makes a new spaceship object
                             Spaceship newShip = new Spaceship(shipName, fuelCap);
+                            // adds to space arraylist
                             space.add(newShip);
                             break;
                         case 'B':
                             input = " ";
+                            // ask for spacecraft name
                             System.out.println("Enter the name of the spacecraft. Say cancel to cancel.");
                             input = scan.nextLine();
                             for (Spaceship ship : space) {
+                                // go through each spaceship object
                                 if (ship.getName().equalsIgnoreCase(input)) {
+                                    //if the name is equal to input, select this.
+                                    // found is true.
                                     found = true;
+                                    // display name
                                     shipName = ship.getName();
+                                    // display the current amount of fuel already in there.
                                     currentFuel = ship.getCurrent();
+                                    // display the capacity.
                                     fuelCap = ship.getCap();
+                                    // the remaining space is the capacity subtracted by the current amount.
                                     remainingSpace = fuelCap - currentFuel;
+                                    // show details
                                     System.out.println("Now viewing refuel settings for " + shipName);
                                     System.out.println("Max Capacity: " + fuelCap);
                                     System.out.println("Current Fuel: " + currentFuel);
                                     System.out.println("Available space: " + remainingSpace);
                                     if (remainingSpace == 0) {
+                                        // since there's no space left, cancel refuel.
                                         System.out.println("No room left. Cancelling refuel.");
                                         break;
                                     } else {
+                                        // since there is space left, refuel.
                                         System.out.println("Enter the amount to refuel.");
+                                        // take a number from the user.
                                         refuel = scan.nextDouble();
+                                        // call the refuel method
                                         ship.refuel(refuel);
                                         break;
                                     }
                                 } else if (input.equalsIgnoreCase("cancel")) {
+                                    // cancel the refuel
                                     System.out.println("Cancelling.");
                                     break;
                                 } else {
+                                    // Default.
                                     System.out.println("No name found. Try again.");
                                     break;
                                 }
                             }
                         case 'C':
+                        // Adding astronauts
+                            // Prompt for spaceship name
                             System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
+                                // Cancels the operation, sets found to true in order to skip error message.
                                 System.out.println("Cancelling.");
+                                found = true;
                                 break;
                             } else {
+                                // scan space arraylist for a spaceship named as the input.
                                 for (Spaceship ship : space) {
+                                    // If found
                                     if (ship.getName().equalsIgnoreCase(input)) {
+                                        // Prompt for astronaut name.
                                         System.out.println("Ship found. Enter the astronaut name.");
                                         input = scan.nextLine();
+                                        // Search astros arraylist for the astronaut name.
                                         for (Astronaut astro : astros) {
                                             if (astro.getName().equalsIgnoreCase(input)) {
+                                                // If found, add to ship
                                                 System.out.println("Astronaut found. Adding to ship.");
+                                                // adds to ship
                                                 ship.addAstro(astro.getName());
+                                                // set found to true
                                                 found = true;
+                                                // sets spacecraftID to the ship's id for SQL saving.
                                                 astro.setID(ship.getID());
                                             }
                                         }
@@ -503,26 +535,39 @@ public class Main {
                                 }
                             }
                             if (!found) {
+                                // If not found, show error.
                                 System.out.println(
                                         "Either ship name or astronaut name was not found. Please check for typos and try again.");
                             }
                             break;
                         case 'D':
+                        // removing astronauts.
+                            // Prompt for ship name
                             System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
+                                //Cancel.
                                 System.out.println("Cancelling.");
+                                // Found set to true to override error message.
+                                found = true;
                                 break;
                             } else {
+                                // Scan space arraylist to find spacecraft name matching the input
                                 for (Spaceship ship : space) {
                                     if (ship.getName().equalsIgnoreCase(input)) {
+                                        // if found, prompt for astronaut name.
                                         System.out.println("Ship found. Enter the astronaut name.");
                                         input = scan.nextLine();
+                                        // scan astros arraylist for astronaut name matching with input.
                                         for (Astronaut astro : astros) {
                                             if (astro.getName().equalsIgnoreCase(input)) {
+                                                // If found, remove astronaut from ship.
                                                 System.out.println("Astronaut found. Deleting from ship.");
+                                                // Remove astronaut from ship's name arraylist
                                                 ship.removeAstro(astro.getName());
+                                                // set found to true
                                                 found = true;
+                                                // set astronaut's ID to 0, the default number for astronauts with no spacecraft.
                                                 astro.setID(0);
                                             }
                                         }
@@ -530,26 +575,35 @@ public class Main {
                                 }
                             }
                             if (!found) {
+                                // If not found, display error message.
                                 System.out.println(
                                         "Either ship name or astronaut name was not found. Please check for typos and try again.");
                             }
                             break;
                         case 'E':
+                        // Ship info display.
                             System.out.println("Enter name of ship, all for all ship info, or cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
+                                // If cancel, cancel and set found to true to override error.
                                 System.out.println("Cancelling.");
                                 found = true;
                                 break;
                             } else if (input.equalsIgnoreCase("all")) {
+                                // Show info for all ships in arraylist, if prompted to.
                                 for (Spaceship ship : space) {
+                                    // Fully show details of current ship.
                                     ship.fullShow();
                                 }
+                                // Set found to true to override error.
                                 found = true;
                                 break;
                             } else {
+                                // Scan ships that match with the input
                                 for (Spaceship ship : space) {
+                                    // Find ship that matches
                                     if (ship.getName().equalsIgnoreCase(input)) {
+                                        // Show info for that ship, set found to true.
                                         ship.fullShow();
                                         found = true;
                                         break;
@@ -558,22 +612,27 @@ public class Main {
                                 }
                             }
                             if (!found) {
+                                // If not found, display error.
                                 System.out.println("Input does not match with any options. Check for misspells.");
                             }
                             break;
                         case 'Z':
+                        // Returns to main menu.
                             System.out.println("Returning to the main menu.");
                             break;
 
                         default:
+                        // By default, show error.
                             System.out.println("Invalid option.");
                             break;
                     }
                 }
+                // reset found and option.
                 found = false;
                 option = ' ';
             }
         }
+        // Close scanner.
         scan.close();
     }
 }
