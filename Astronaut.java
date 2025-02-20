@@ -19,9 +19,10 @@ public class Astronaut {
     String formattedWeight;
     String realRate;
     String sqlInput;
+    int spaceshipID;
 
     public Astronaut(ResultSet rs) throws SQLException {
-        name = rs.getString("name");
+        name = rs.getString("AstroName");
         dob = rs.getString("dob");
         serial = rs.getInt("serial");
         number = rs.getLong("phone");
@@ -38,6 +39,7 @@ public class Astronaut {
                 (number / 10000) % 1000,
                 number % 10000);
         formattedWeight = String.format("%.2f lbs", weight);
+        spaceshipID = rs.getInt("spacecraftID");
     }
 
     public Astronaut(String name, String dob, int serial, String address, String email, long number, double rate,
@@ -59,21 +61,23 @@ public class Astronaut {
                 number / 10000000,
                 (number / 10000) % 1000,
                 number % 10000);
+        spaceshipID = 0;
         // String sqlThing = "SELECT * FROM Astronauts;";
-        sqlInput = "INSERT INTO Astronauts(name,dob,serial,phone,address,email,rate,weight,kin,status) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        sqlInput = "INSERT INTO Astronauts(AstroName,dob,serial,phone,address,email,rate,weight,kin,status, spacecraftID) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
-            pstmt.setString(1, name);
-            pstmt.setString(2, dob);
-            pstmt.setInt(3, serial);
-            pstmt.setLong(4, number);
-            pstmt.setString(5, address);
-            pstmt.setString(6, email);
-            pstmt.setDouble(7, rate);
-            pstmt.setDouble(8, weight);
-            pstmt.setString(9, kin);
-            pstmt.setBoolean(10, status);
+            pstmt.setString(2, name);
+            pstmt.setString(3, dob);
+            pstmt.setInt(4, serial);
+            pstmt.setLong(5, number);
+            pstmt.setString(6, address);
+            pstmt.setString(7, email);
+            pstmt.setDouble(8, rate);
+            pstmt.setDouble(9, weight);
+            pstmt.setString(10, kin);
+            pstmt.setBoolean(11, status);
+            pstmt.setInt(12, spaceshipID);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -83,12 +87,12 @@ public class Astronaut {
 
     public void setName(String name) {
         this.name = name;
-        sqlInput = "INSERT INTO Astronauts(name) VALUES(?)";
+        sqlInput = "INSERT INTO Astronauts(AstroName) VALUES(?)";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(1, name);
+                pstmt.setString(2, name);
                 pstmt.executeUpdate();
             }
 
@@ -104,7 +108,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(2, dob);
+                pstmt.setString(3, dob);
                 pstmt.executeUpdate();
             }
 
@@ -120,7 +124,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setInt(3, serial);
+                pstmt.setInt(4, serial);
                 pstmt.executeUpdate();
             }
 
@@ -136,7 +140,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(5, address);
+                pstmt.setString(6, address);
                 pstmt.executeUpdate();
             }
 
@@ -152,7 +156,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(6, email);
+                pstmt.setString(7, email);
                 pstmt.executeUpdate();
             }
 
@@ -172,7 +176,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(4, phoneNum);
+                pstmt.setString(5, phoneNum);
                 pstmt.executeUpdate();
             }
 
@@ -190,7 +194,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(7, realRate);
+                pstmt.setString(8, realRate);
                 pstmt.executeUpdate();
             }
 
@@ -207,7 +211,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(8, formattedWeight);
+                pstmt.setString(9, formattedWeight);
                 pstmt.executeUpdate();
             }
 
@@ -223,7 +227,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setString(9, kin);
+                pstmt.setString(10, kin);
                 pstmt.executeUpdate();
             }
 
@@ -239,7 +243,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setBoolean(10, status);
+                pstmt.setBoolean(11, status);
                 pstmt.executeUpdate();
             }
 
@@ -289,6 +293,26 @@ public class Astronaut {
             return "Astronaut is currently in space!";
         }
         return "Astronaut is on Earth";
+    }
+
+    public void setID(int spaceshipID) {
+        this.spaceshipID = spaceshipID;
+        sqlInput = "INSERT INTO Astronauts(spacecraftID) VALUES(?)";
+        try (var conn = DriverManager.getConnection(url);
+                var pstmt = conn.prepareStatement(sqlInput)) {
+
+            for (int i = 0; i < 3; i++) {
+                pstmt.setInt(12, spaceshipID);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public int getID() {
+        return spaceshipID;
     }
 
     public String toString() {
