@@ -30,8 +30,10 @@ public class Launch {
         }, 0, 1000);
     }
 
-    double speed;
-    double altitude;
+    
+    double altitude = 0;
+    double FuelBurnRate = 1;
+    double speed = FuelBurnRate * 30;
     double swAlt = 70000;
     Timer Timer = new Timer();
     TimerTask missionTask = new TimerTask() {
@@ -53,5 +55,6 @@ public class Launch {
 
         }
     }
+    
 }
 
