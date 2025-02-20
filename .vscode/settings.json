@@ -2,5 +2,6 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "sqlite-jdbc-3.49.0.0.jar"
-    ]
+    ],
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
 }

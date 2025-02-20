@@ -38,17 +38,7 @@ public class Main {
                 "   id INTEGER PRIMARY KEY," +
                 "	name text NOT NULL," +
                 "   maxFuel REAL NOT NULL," +
-                "   currentFuel REAL NOT NULL," +
-                "   astro1 text," +
-                "   astro2 text," +
-                "   astro3 text," +
-                "   astro4 text," +
-                "   astro5 text," +
-                "   astro6 text," +
-                "   astro7 text," +
-                "   astro8 text," +
-                "   astro9 text," +
-                "   astro10 text" +
+                "   currentFuel REAL NOT NULL" +
                 ");";
 
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
@@ -57,9 +47,9 @@ public class Main {
                 "   logins INTEGER NOT NULL" +
                 ");";
 
-        var addZeroAttempts = "INSERT INTO ..."
+        var addZeroAttempts = "INSERT INTO ...";
 
-        var getAllAstronauts = "SELECT * FROM Astronauts LEFT JOIN Ships ON Astronauts.id=Ships.id;";
+        var getAllAstronauts = "SELECT * FROM Astronauts LEFT JOIN Ships ON Astronauts.spacecraftID=Ships.id;";
         var getAllSpace = "SELECT * FROM Ships LEFT JOIN Astronauts ON Ships.id=Astronauts.spacecraftID;";
         var getAllGeneral = "SELECT * FROM General;";
         // var getAstronautByEmail = "SELECT * Astronauts WHERE email =
@@ -77,7 +67,7 @@ public class Main {
             // create a new table
             stmt.execute(createAstronautTable);
             stmt.execute(createShipTable);
-            stmt.execute(createGeneralTable);
+            // stmt.execute(createGeneralTable);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -109,18 +99,18 @@ public class Main {
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
         // try (var conn = DriverManager.getConnection(url);
-        //         var stmt = conn.createStatement();
-        //         var rs = stmt.executeQuery(getAllAstronauts)) {
+        // var stmt = conn.createStatement();
+        // var rs = stmt.executeQuery(getAllAstronauts)) {
 
-        //     while (rs.next()) {
+        // while (rs.next()) {
 
-        //         for (int i = 0; i < rs.getRow(); i++) {
-        //             Astronaut loadAstro = new Astronaut(rs);
-        //             astros.add(loadAstro);
-        //         }
-        //     }
+        // for (int i = 0; i < rs.getRow(); i++) {
+        // Astronaut loadAstro = new Astronaut(rs);
+        // astros.add(loadAstro);
+        // }
+        // }
         // } catch (SQLException e) {
-        //     System.err.println(e.getMessage());
+        // System.err.println(e.getMessage());
         // }
         try (var conn = DriverManager.getConnection(url);
                 var stmt = conn.createStatement();
@@ -130,7 +120,7 @@ public class Main {
                 for (int i = 0; i < rs.getRow(); i++) {
                     Spaceship loadSpace1 = new Spaceship(rs);
                     space.add(loadSpace1);
-        
+
                     Astronaut loadAstro = new Astronaut(rs);
                     astros.add(loadAstro);
                 }
@@ -160,17 +150,17 @@ public class Main {
             System.out.println("The password is 573219. Write this down.");
             attempts += 1;
             sqlInput = "INSERT INTO General(logins) VALUES(?)";
-        try (var conn = DriverManager.getConnection(url);
-                var pstmt = conn.prepareStatement(sqlInput)) {
+            try (var conn = DriverManager.getConnection(url);
+                    var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setInt(1, attempts);
-                pstmt.executeUpdate();
+                for (int i = 0; i < 3; i++) {
+                    pstmt.setInt(1, attempts);
+                    pstmt.executeUpdate();
+                }
+
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
             }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
         }
         while (inputPassword != password) {
             System.out.println("Please enter the password.");
@@ -195,6 +185,7 @@ public class Main {
                     System.out.println("A) Add Astroanuts");
                     System.out.println("B) Display Astronauts");
                     System.out.println("C) Edit Astronaut");
+                    System.out.println("D) Delete Astronaut");
                     System.out.println("Z) Stop");
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
@@ -232,17 +223,7 @@ public class Main {
                             kin = scan.nextLine();
                             System.out.println("Are they currently in space? (T for yes, F for no)");
                             option = scan.nextLine().toUpperCase().charAt(0);
-                            while (option != 'T' && option != 'F') {
-                                System.out.println(
-                                        "Invalid input. Is the astronaut currently in space? (T for yes, F for no)");
-                                option = scan.nextLine().toUpperCase().charAt(0);
-                            }
-                            if (option == 'T') {
-                                status = true;
-                            }
-                            if (option == 'F') {
-                                status = false;
-                            }
+                            status = false;
                             Astronaut newAstronaut = new Astronaut(name, dob, serial, address, email, number, rate,
                                     weight, kin, status);
                             astros.add(newAstronaut);
@@ -354,6 +335,26 @@ public class Main {
                                 System.out.println("Astronaut not found, please check for typos.");
                             }
                             break;
+                        case 'D':
+                            System.out.println("THIS IS THE DELETION SERVICE. PLEASE REALLY CONSIDER YOUR NEXT MOVE.");
+                            System.out.println("Enter the name of the astronaut you would like to delete. Say cancel to cancel.");
+                            input = scan.nextLine();
+                            if (input.equalsIgnoreCase("cancel")) {
+                                System.out.println("Cancelling.");
+                                found = true;
+                            } else {
+                                for (Astronaut astro : astros) {
+                                    if (input.equals(astro.getName())) {
+                                        astro.astroDeleter();
+                                        astros.remove(astro.getID() - 1);
+                                        found = true;
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                System.out.println("Astronaut name was invalid. Please check for spelling and capitalization.");
+                            }
+
                         case 'Z':
                             System.out.println("Returning to the main menu.");
                             break;
@@ -363,6 +364,7 @@ public class Main {
                     }
                 }
                 option = ' ';
+                found = false;
             }
             while (option == 'B') {
                 option = ' ';
@@ -373,7 +375,8 @@ public class Main {
                     System.out.println("A) Add Spaceships");
                     System.out.println("B) Refuel Ship");
                     System.out.println("C) Add Astronaut to Ship");
-                    System.out.println("D) Show Info");
+                    System.out.println("D) Remove Astronaut");
+                    System.out.println("E) Show Info");
                     System.out.println("Z) Quit");
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
@@ -425,16 +428,18 @@ public class Main {
                             if (input.equalsIgnoreCase("cancel")) {
                                 System.out.println("Cancelling.");
                                 break;
-                            }
-                            for (Spaceship ship : space) {
-                                if (ship.getName().equalsIgnoreCase(input)) {
-                                    System.out.println("Ship found. Enter the astronaut name.");
-                                    input = scan.nextLine();
-                                    for (Astronaut astro : astros) {
-                                        if (astro.getName().equalsIgnoreCase(input)) {
-                                            System.out.println("Astronaut found. Adding to ship.");
-                                            ship.addAstro(astro.getName());
-                                            found = true;
+                            } else {
+                                for (Spaceship ship : space) {
+                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                        System.out.println("Ship found. Enter the astronaut name.");
+                                        input = scan.nextLine();
+                                        for (Astronaut astro : astros) {
+                                            if (astro.getName().equalsIgnoreCase(input)) {
+                                                System.out.println("Astronaut found. Adding to ship.");
+                                                ship.addAstro(astro.getName());
+                                                found = true;
+                                                astro.setID(ship.getID());
+                                            }
                                         }
                                     }
                                 }
@@ -445,6 +450,33 @@ public class Main {
                             }
                             break;
                         case 'D':
+                            System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
+                            input = scan.nextLine();
+                            if (input.equalsIgnoreCase("cancel")) {
+                                System.out.println("Cancelling.");
+                                break;
+                            } else {
+                                for (Spaceship ship : space) {
+                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                        System.out.println("Ship found. Enter the astronaut name.");
+                                        input = scan.nextLine();
+                                        for (Astronaut astro : astros) {
+                                            if (astro.getName().equalsIgnoreCase(input)) {
+                                                System.out.println("Astronaut found. Deleting from ship.");
+                                                ship.removeAstro(astro.getName());
+                                                found = true;
+                                                astro.setID(0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                System.out.println(
+                                        "Either ship name or astronaut name was not found. Please check for typos and try again.");
+                            }
+                            break;
+                        case 'E':
                             System.out.println("Enter name of ship, all for all ship info, or cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
@@ -463,12 +495,12 @@ public class Main {
                                         ship.fullShow();
                                         found = true;
                                         break;
-                                        
+
                                     }
                                 }
                             }
                             if (!found) {
-                            System.out.println("Input does not match with any options. Check for misspells.");
+                                System.out.println("Input does not match with any options. Check for misspells.");
                             }
                             break;
                         case 'Z':
@@ -486,8 +518,4 @@ public class Main {
         }
         scan.close();
     }
-
-    public static void setAstroShips() {
-        
-    } 
 }

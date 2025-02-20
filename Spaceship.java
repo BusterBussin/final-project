@@ -84,6 +84,11 @@ public class Spaceship {
 
     }
 
+    public void removeAstro(String name) {
+        astroNames.remove(name);
+        System.out.println("Astronaut removed successfully");
+    }
+
     public void showAstro() {
         System.out.println("Astronauts: " + astroNames.size());
         for (int i = 0; i < astroNames.size(); i++) {
