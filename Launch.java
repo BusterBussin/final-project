@@ -17,8 +17,8 @@ public class Launch {
                     seconds--;
                 } else {
                     timer.cancel();
-                    double randValue = Math.random();
-                    if(randValue < blastOff){
+                    double engineFail = Math.random();
+                    if(engineFail < blastOff){
                     System.out.println("Blast off!");
                     }
                     else {
@@ -55,6 +55,21 @@ public class Launch {
 
         }
     }
-    
+    double land = .95;
+    double crash = 1 - land;
+    public String ReturnToEarth() {
+        double Land = Math.random();
+        if(speed >= 3000) {
+            System.out.println("The ship burned up.");
+        }
+        if(altitude <= 0) {
+            if(Land < land) {
+            System.out.println("The ship has landed safely. Astronauts may exit.");
+            }
+            else {
+                System.out.println("Crash landing, everyone is dead.");
+            }
+        }
+    }
 }
 
