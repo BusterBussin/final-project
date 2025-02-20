@@ -6,19 +6,23 @@ import java.util.ArrayList;
 public class Main {
 
     public static void connect() {
-        // connection string
+        // connection string, connects to database
         var url = "jdbc:sqlite:spaceprogram.db";
-
+        // tries to connect to database
         try (var conn = DriverManager.getConnection(url)) {
             System.out.println("Connection to SQLite has been established.");
         } catch (SQLException e) {
+            // if unable to connect, display error.
             System.out.println(e.getMessage());
         }
     }
 
     public static void main(String args[]) {
+        //conects to database
         connect();
+        //url for database
         String url = "jdbc:sqlite:spaceprogram.db";
+        //Astronaut table.
         var createAstronautTable = "CREATE TABLE IF NOT EXISTS Astronauts (" +
                 "   id INTEGER PRIMARY KEY," +
                 "	AstroName text NOT NULL," +
@@ -33,24 +37,26 @@ public class Main {
                 "   status BOOLEAN," +
                 "   spacecraftID INTEGER" +
                 ");";
-
+        // Spaceship table
         var createShipTable = "CREATE TABLE IF NOT EXISTS Ships (" +
                 "   id INTEGER PRIMARY KEY," +
                 "	name text NOT NULL," +
                 "   maxFuel REAL NOT NULL," +
                 "   currentFuel REAL NOT NULL" +
                 ");";
-
+        // misc table
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
                 "   id INTEGER PRIMARY KEY," +
                 "   password INTEGER NOT NULL," +
                 "   logins INTEGER NOT NULL" +
                 ");";
-
+        // sets attempts to 0
         var addZeroAttempts = "INSERT INTO ...";
-
+        // command to get all from astronaut table and combine with spaceship table
         var getAllAstronauts = "SELECT * FROM Astronauts LEFT JOIN Ships ON Astronauts.spacecraftID=Ships.id;";
+        // command to combine with spaceship table and combine with astronaut table
         var getAllSpace = "SELECT * FROM Ships LEFT JOIN Astronauts ON Ships.id=Astronauts.spacecraftID;";
+        // command to get general table
         var getAllGeneral = "SELECT * FROM General;";
         // var getAstronautByEmail = "SELECT * Astronauts WHERE email =
         // 'kruskiej@baisd.net'";
@@ -62,6 +68,7 @@ public class Main {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        // creates new tables if they do not exist already
         try (var conn = DriverManager.getConnection(url);
                 var stmt = conn.createStatement()) {
             // create a new table
@@ -71,6 +78,7 @@ public class Main {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        // variables used.
         var sqlInput = " ";
         int password = 573219;
         int inputPassword = 0;
@@ -96,6 +104,7 @@ public class Main {
         String numCheck;
         Scanner scan = new Scanner(System.in);
         // SELECT * FROM Astronauts LEFT JOIN spacecrafts.id on astronauts.spacecraftId;
+        // two array lists, one for astronauts and one for spaceships
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
         // try (var conn = DriverManager.getConnection(url);
@@ -112,6 +121,8 @@ public class Main {
         // } catch (SQLException e) {
         // System.err.println(e.getMessage());
         // }
+
+        // gets all astronaut and ship information off of SQL.
         try (var conn = DriverManager.getConnection(url);
                 var stmt = conn.createStatement();
                 var rs = stmt.executeQuery(getAllAstronauts)) {
@@ -128,7 +139,7 @@ public class Main {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
+        // gets all misc info off SQL
         try (var conn = DriverManager.getConnection(url);
                 var stmt = conn.createStatement();
                 var rs = stmt.executeQuery(getAllGeneral)) {
@@ -139,6 +150,7 @@ public class Main {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        // loads astronauts into designated ships, if they have one.
         for (Spaceship shipLoad : space) {
             for (Astronaut astroLoad : astros) {
                 if (shipLoad.getID() == astroLoad.getID()) {
@@ -146,9 +158,12 @@ public class Main {
                 }
             }
         }
+        // If this is first time using the table, display.
         if (attempts == 0) {
             System.out.println("The password is 573219. Write this down.");
+            // add an attempt so it can no longer be seen
             attempts += 1;
+            // save to SQL
             sqlInput = "INSERT INTO General(logins) VALUES(?)";
             try (var conn = DriverManager.getConnection(url);
                     var pstmt = conn.prepareStatement(sqlInput)) {
@@ -162,24 +177,30 @@ public class Main {
                 System.err.println(e.getMessage());
             }
         }
+        // prompt for password
         while (inputPassword != password) {
             System.out.println("Please enter the password.");
             inputPassword = scan.nextInt();
             scan.nextLine();
+            // Check if password is correct.
             if (inputPassword != password) {
                 System.out.println("That's the wrong password.");
             }
         }
+        // Main menu
         while (option != 'Z') {
             System.out.println("Please select an option");
             System.out.println("A) Manage Astronauts");
             System.out.println("B) Manage Spaceships");
             System.out.println("Z) Exit");
+            // autoupper, takes the first letter
             option = scan.nextLine().toUpperCase().charAt(0);
             while (option == 'A') {
                 option = ' ';
                 while (option != 'Z') {
                     found = false;
+                    // Astronaut screen
+                    // Displays the number of astronauts using the number in the arraylist
                     System.out.println("Current number of astronauts: " + astros.size());
                     System.out.println("Select what to do");
                     System.out.println("A) Add Astroanuts");
@@ -190,6 +211,7 @@ public class Main {
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
                         case 'A':
+                        // Creates the astronaut
                             System.out.println("Enter the name of the astronaut");
                             name = scan.nextLine();
                             System.out.println("Enter date of birth (Any format, preferably YYYY-MM-DD)");
@@ -201,6 +223,7 @@ public class Main {
                             address = scan.nextLine();
                             System.out.println("Enter email.");
                             email = scan.nextLine();
+                            // Check for @ symbol.
                             while (!email.contains("@")) {
                                 System.out.println("Invalid email. Enter email.");
                                 email = scan.nextLine();
@@ -208,10 +231,12 @@ public class Main {
                             System.out.println(
                                     "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
                             numCheck = scan.nextLine();
+                            // Phone number must be 10 digits.
                             while (!numCheck.matches("\\d{10}")) {
                                 System.out.println("Invalid number. Please enter a valid phone number");
                                 numCheck = scan.nextLine();
                             }
+                            // Takes numCheck and parses it to long.
                             number = Long.parseLong(numCheck);
                             System.out.println("Enter payrate (In form 0.00)");
                             rate = scan.nextDouble();
@@ -221,29 +246,37 @@ public class Main {
                             scan.nextLine();
                             System.out.println("Enter next of kin's name");
                             kin = scan.nextLine();
-                            System.out.println("Are they currently in space? (T for yes, F for no)");
-                            option = scan.nextLine().toUpperCase().charAt(0);
+                            // System.out.println("Are they currently in space? (T for yes, F for no)");
+                            // option = scan.nextLine().toUpperCase().charAt(0);
                             status = false;
+                            // Registers astronaut into system.
                             Astronaut newAstronaut = new Astronaut(name, dob, serial, address, email, number, rate,
                                     weight, kin, status);
                             astros.add(newAstronaut);
                             System.out.println("Astronaut added successfully!");
                             break;
                         case 'B':
+                            // Displays astronaut name.
                             for (int i = 0; i < astros.size(); i++) {
                                 System.out.println("Astronaut " + astros.size());
                                 System.out.println(astros.get(i));
                             }
                             break;
                         case 'C':
+                            // Asks for an astronaut name
                             System.out.println("Enter the name of the astronaut. Type cancel to cancel.");
                             input = scan.nextLine();
+                            // Cancel if needed
                             if (input.equalsIgnoreCase("cancel")) {
                                 System.out.println("Cancelling.");
                                 found = true;
                             } else {
+                                // else, do this.
                                 for (Astronaut astro : astros) {
+                                    // Go through astros, find name.
+                                    // If the astronaut name is the same as the input, trigger this.
                                     if (astro.getName().equalsIgnoreCase(input)) {
+                                        // Found.
                                         found = true;
                                         while (option != 'Z') {
                                             System.out.println("Editing astronaut: " + astro.getName());
@@ -253,18 +286,21 @@ public class Main {
                                             option = scan.nextLine().toUpperCase().charAt(0);
                                             switch (option) {
                                                 case 'A':
+                                                // Changes name
                                                     System.out.println("Enter new name");
                                                     name = scan.nextLine();
                                                     astro.setName(name);
                                                     option = ' ';
                                                     break;
                                                 case 'B':
+                                                // Changes date of birth
                                                     System.out.print("Enter new DOB (preferred in 2000-01-01)");
                                                     dob = scan.nextLine();
                                                     astro.setDOB(dob);
                                                     option = ' ';
                                                     break;
                                                 case 'C':
+                                                // Changes serial number
                                                     System.out.println("Enter new serial");
                                                     serial = scan.nextInt();
                                                     scan.nextLine();
@@ -272,14 +308,17 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'D':
+                                                // Changes address
                                                     System.out.println("Enter new address");
                                                     address = scan.nextLine();
                                                     astro.setAddress(address);
                                                     option = ' ';
                                                     break;
                                                 case 'E':
+                                                // Changes email
                                                     System.out.println("Enter email.");
                                                     email = scan.nextLine();
+                                                    // check for @ symbol
                                                     while (!email.contains("@")) {
                                                         System.out.println("Invalid email. Enter email.");
                                                         email = scan.nextLine();
@@ -288,19 +327,23 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'F':
+                                                // Change phone number
                                                     System.out.println(
                                                             "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
                                                     numCheck = scan.nextLine();
+                                                    // Checks for 10 digits
                                                     while (!numCheck.matches("\\d{10}")) {
                                                         System.out.println(
                                                                 "Invalid number. Please enter a valid phone number");
                                                         numCheck = scan.nextLine();
                                                     }
+                                                    // parse to long
                                                     number = Long.parseLong(numCheck);
                                                     astro.setPhone(number);
                                                     option = ' ';
                                                     break;
                                                 case 'G':
+                                                // Change payrate
                                                     System.out.println("Enter payrate (In form 0.00)");
                                                     rate = scan.nextDouble();
                                                     scan.nextLine();
@@ -308,6 +351,7 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'H':
+                                                // Change weight
                                                     System.out.println("Enter weight (In form 0.00, in pounds)");
                                                     weight = scan.nextDouble();
                                                     scan.nextLine();
@@ -315,14 +359,17 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'I':
+                                                // Change next of kin
                                                     System.out.println("Enter next of kin's name");
                                                     kin = scan.nextLine();
                                                     astro.setKin(kin);
                                                     option = ' ';
                                                 case 'Z':
+                                                // Returns to main menu
                                                     System.out.println("Returning to main menu");
                                                     break;
                                                 default:
+                                                // If all else fails, give error.
                                                     System.out.println("invalid input.");
                                                     option = ' ';
                                                     break;
@@ -332,37 +379,48 @@ public class Main {
                                 }
                             }
                             if (!found) {
+                                // Astronaut not found.
                                 System.out.println("Astronaut not found, please check for typos.");
                             }
                             break;
                         case 'D':
+                            // Warn user.
                             System.out.println("THIS IS THE DELETION SERVICE. PLEASE REALLY CONSIDER YOUR NEXT MOVE.");
                             System.out.println("Enter the name of the astronaut you would like to delete. Say cancel to cancel.");
                             input = scan.nextLine();
+                            // Cancel if told to
                             if (input.equalsIgnoreCase("cancel")) {
                                 System.out.println("Cancelling.");
+                                // Found = true, since there was nothing to find anyway.
                                 found = true;
                             } else {
+                                // Else, take the input and find the astronaut.
                                 for (Astronaut astro : astros) {
                                     if (input.equals(astro.getName())) {
+                                        // Delete from SQL
                                         astro.astroDeleter();
+                                        // Delete from arraylist.
                                         astros.remove(astro.getID() - 1);
                                         found = true;
                                     }
                                 }
                             }
                             if (!found) {
+                                // If not found, error out.
                                 System.out.println("Astronaut name was invalid. Please check for spelling and capitalization.");
                             }
 
                         case 'Z':
+                        // Returns to main menu.
                             System.out.println("Returning to the main menu.");
                             break;
                         default:
+                        // user entered invalid option.
                             System.out.println("Invalid option.");
                             break;
                     }
                 }
+                // reset option and found
                 option = ' ';
                 found = false;
             }
