@@ -6,6 +6,7 @@ public class Astronaut {
     String url = "jdbc:sqlite:spaceprogram.db";
     String name;
     String dob;
+    String idgrabber = "SELECT * FROM Astronauts;";
     int serial;
     String address;
     String email;
@@ -20,6 +21,7 @@ public class Astronaut {
     String realRate;
     String sqlInput;
     int spaceshipID;
+    int id;
 
     public Astronaut(ResultSet rs) throws SQLException {
         name = rs.getString("AstroName");
@@ -67,19 +69,34 @@ public class Astronaut {
 
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
-            pstmt.setString(2, name);
-            pstmt.setString(3, dob);
-            pstmt.setInt(4, serial);
-            pstmt.setLong(5, number);
-            pstmt.setString(6, address);
-            pstmt.setString(7, email);
-            pstmt.setDouble(8, rate);
-            pstmt.setDouble(9, weight);
-            pstmt.setString(10, kin);
-            pstmt.setBoolean(11, status);
-            pstmt.setInt(12, spaceshipID);
+            pstmt.setString(1, name);
+            pstmt.setString(2, dob);
+            pstmt.setInt(3, serial);
+            pstmt.setLong(4, number);
+            pstmt.setString(5, address);
+            pstmt.setString(6, email);
+            pstmt.setDouble(7, rate);
+            pstmt.setDouble(8, weight);
+            pstmt.setString(9, kin);
+            pstmt.setBoolean(10, status);
+            pstmt.setInt(11, spaceshipID);
             pstmt.executeUpdate();
 
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        idGrab();
+    }
+
+    public void idGrab() {
+        try (var conn = DriverManager.getConnection(url);
+                var stmt = conn.createStatement();
+                var rs = stmt.executeQuery(idgrabber)) {
+
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -326,5 +343,20 @@ public class Astronaut {
                 "\nWeight: " + formattedWeight +
                 "\nNext of Kin: " + kin +
                 "\nStatus: " + getStatus();
+    }
+
+    public void astroDeleter() {
+        sqlInput = "DELETE FROM Astronaut WHERE id = ?";
+        try (var conn = DriverManager.getConnection(url);
+             var pstmt = conn.prepareStatement(sqlInput)) {
+
+            pstmt.setInt(1, id);
+
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
