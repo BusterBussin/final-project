@@ -2,6 +2,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 public class Launch {
+                                                                                        // fix all the errors IDK how
     double blastOff = .9;
     double blastOffFail = 1 - blastOff;
 
@@ -21,8 +22,8 @@ public class Launch {
                     if(engineFail < blastOff){
                     System.out.println("Blast off!");
                     }
-                    else {
-                        System.out.println("Engine failed, try again");
+                    else{
+                        System.out.println("Engine failed, try again"); //Extra credit
                         // TODO: make it possile to try again
                     }
                 }
@@ -58,18 +59,23 @@ public class Launch {
     double land = .95;
     double crash = 1 - land;
     public String ReturnToEarth() {
+        //TODO: make the gravity effect the return with the 9.81 m/s^2 formula p.s. IDK what I'm doing
         double Land = Math.random();
         if(speed >= 3000) {
             System.out.println("The ship burned up.");
         }
-        if(altitude <= 0) {
+        if(altitude < 10000) {
             if(Land < land) {
-            System.out.println("The ship has landed safely. Astronauts may exit.");
-            }
-            else {
-                System.out.println("Crash landing, everyone is dead.");
-            }
+            speed = 7;
+            System.out.println("Parachutes have been deployed.");
+        }
+        else { 
+            System.out.println("Parachutes failed to deploy, say your prayers"); //Extra credit
         }
     }
-}
-
+        if(altitude <= 0) {
+            System.out.println("The ship has landed safely. Astronauts may exit.");
+            }
+            
+        }
+    }
