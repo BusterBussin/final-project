@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -246,8 +247,6 @@ public class Main {
                             scan.nextLine();
                             System.out.println("Enter next of kin's name");
                             kin = scan.nextLine();
-                            // System.out.println("Are they currently in space? (T for yes, F for no)");
-                            // option = scan.nextLine().toUpperCase().charAt(0);
                             status = false;
                             // Registers astronaut into system.
                             Astronaut newAstronaut = new Astronaut(name, dob, serial, address, email, number, rate,
@@ -395,14 +394,19 @@ public class Main {
                                 found = true;
                             } else {
                                 // Else, take the input and find the astronaut.
+                                // Make i, autoset to 0
+                                int i = 0;
                                 for (Astronaut astro : astros) {
                                     if (input.equals(astro.getName())) {
                                         // Delete from SQL
                                         astro.astroDeleter();
                                         // Delete from arraylist.
-                                        astros.remove(astro.getID() - 1);
+                                        astros.remove(i);
                                         found = true;
+                                        break;
                                     }
+                                    // increase i
+                                    i++;
                                 }
                             }
                             if (!found) {
