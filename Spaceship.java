@@ -18,6 +18,7 @@ public class Spaceship {
         currentFuel = rs.getDouble("currentFuel");
         spacecraftID = rs.getInt("id");
     }
+
     // SELECT * FROM Astronaut WHERE spacecraftID=1
     public Spaceship(String shipName, double fuelCap) {
         this.shipName = shipName;
