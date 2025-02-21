@@ -245,14 +245,16 @@ public class Astronaut {
             }
 
         } catch (SQLException e) {
-            // 
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
-
+    // setting weight
     public void setWeight(double weight) {
         this.weight = weight;
+        // format weight
         formattedWeight = String.format("%.2f lbs", weight);
+        //SQL line
         sqlInput = "INSERT INTO Astronauts(weight) VALUES(?)";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
@@ -263,12 +265,14 @@ public class Astronaut {
             }
 
         } catch (SQLException e) {
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
-
+    // Setting next of kin
     public void setKin(String kin) {
         this.kin = kin;
+        // SQL line
         sqlInput = "INSERT INTO Astronauts(kin) VALUES(?)";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
@@ -279,12 +283,14 @@ public class Astronaut {
             }
 
         } catch (SQLException e) {
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
-
+    // Setting status
     public void setStatus(boolean status) {
         this.status = status;
+        // SQL line
         sqlInput = "INSERT INTO Astronauts(status) VALUES(?)";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
@@ -295,55 +301,59 @@ public class Astronaut {
             }
 
         } catch (SQLException e) {
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
-
+    // Returns the name
     public String getName() {
         return name;
     }
-
+    // Returns date of birth
     public String getDOB() {
         return dob;
     }
-
+    // Returns serial
     public int getSerial() {
         return serial;
     }
-
+    // Returns address
     public String getAddress() {
         return address;
     }
-
+    // Returns email
     public String getEmail() {
         return email;
     }
-
+    // Returns phone
     public String getPhone() {
         return phoneNum;
     }
-
+    // Returns weight
     public String getWeight() {
         return formattedWeight;
     }
-
+    // Returns rate
     public String getPayRate() {
         return formattedRate;
     }
-
+    // Returns kin name
     public String getKin() {
         return kin;
     }
-
+    // Returns status
     public String getStatus() {
+        // If the astronaut is in space
         if (status) {
             return "Astronaut is currently in space!";
         }
+        // If astronaut is not in space
         return "Astronaut is on Earth";
     }
-
+    // Sets spacecraft id
     public void setID(int spaceshipID) {
         this.spaceshipID = spaceshipID;
+        // SQL line
         sqlInput = "INSERT INTO Astronauts(spacecraftID) VALUES(?)";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
@@ -354,14 +364,15 @@ public class Astronaut {
             }
 
         } catch (SQLException e) {
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
-
+    // Returns ID
     public int getID() {
         return spaceshipID;
     }
-
+    // Gets current ID
     public int SQLDelete() {
         try (var conn = DriverManager.getConnection(url);
                 var stmt = conn.createStatement();
@@ -375,7 +386,7 @@ public class Astronaut {
         }
         return id;
     }
-
+    // Returns all info
     public String toString() {
         return "Name: " + name +
                 "\nDOB: " + dob +
@@ -388,18 +399,19 @@ public class Astronaut {
                 "\nNext of Kin: " + kin +
                 "\nStatus: " + getStatus();
     }
-
-    public void astroDeleter() {
+    // Deletes astronaut from SQL
+    public void astroDeleter() {   
+        // Line used to delete
         sqlInput = "DELETE FROM Astronauts WHERE id = ?";
         try (var conn = DriverManager.getConnection(url);
              var pstmt = conn.prepareStatement(sqlInput)) {
-
             pstmt.setInt(1, id);
 
             // execute the delete statement
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
+            // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
