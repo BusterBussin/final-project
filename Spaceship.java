@@ -66,11 +66,11 @@ public class Spaceship {
     public String getAstro(int i) {
         return astroNames.get(i);
     }
-
+    // If the status is true, this means the ship is still active (aka not blown)
     public boolean getStat() {
         return status;
     }
-
+    // Sets status to false if ship blows up
     public void setStat(boolean status) {
         this.status = status;
     }
@@ -101,7 +101,7 @@ public class Spaceship {
     public int getID() {
         return spacecraftID;
     }
-
+    // Sets currentFuel, only used for removing. 
     public void setCurrent(double currentFuel) {
         this.currentFuel = currentFuel;
     }
@@ -129,7 +129,7 @@ public class Spaceship {
             System.out.println(astroNames.get(i));
         }
     }
-
+    // Get astronaut number.
     public int getSize() {
         return astroNames.size() + 1;
     }

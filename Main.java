@@ -647,54 +647,78 @@ public class Main {
                 option = ' ';
             }
             while (option == 'C') {
+                // Set all needed inputs to default.
                 found = false;
                 input = " ";
                 option = ' ';
+                // Print a warning
                 System.out.println(
                         "You are now in the launching process. If your designated ship is ready, launch. Cancel now to back out. (Y/N)");
+                // Take input from user
                 option = scan.nextLine().toUpperCase().charAt(0);
+                // While theinput is invalid, keep requesting input.
                 while (option != 'Y' && option != 'N') {
                     System.out.println("Not a valid option. Press Y to cancel or N to proceed.");
                     option = scan.nextLine().toUpperCase().charAt(0);
                 }
+                // If yes, cancel.
                 if (option == 'Y') {
                     System.out.println("Cancelling.");
                     break;
                 }
+                // Otherwise, request for spaceship name.
                 System.out.println("Type the name of the spaceship needed. We will undergo checks for the spaceship.");
                 input = scan.nextLine();
+                // Find spaceship
                 for (Spaceship ship : space) {
+                    // If found
                     if (ship.getName().equals(input)) {
                         System.out.println("Spaceship found.");
+                        // Set found to true
                         found = true;
+                        // Start checks
+                        // Check 1: Fuel
                         System.out.println("Minimal fuel required: 500 lbs");
                         System.out.println("spaceship fuel: " + ship.getCurrent() + " lbs");
+                        // If it lines up, proceed
                         if (ship.getCurrent() >= 500) {
+                            // Check 2: People
                             System.out.println("Minimal capacity required: 3 people.");
                             System.out.println("Spaceship Capacity: " + ship.getSize() + " people");
+                            // If good, proceed
                             if (ship.getSize() >= 3) {
+                                // Start launch
                                 System.out.println(ship.getName() + "is ready for takeoff. Prepare the engine...");
                                 System.out.println("Engine prepared. Preparing for launch...");
+                                // Start countdown
                                 System.out.println("T-Minus 10 seconds");
+                                // Every second, count down one second
                                 timer.scheduleAtFixedRate(new TimerTask() {
+                                    // Preset launch
                                     int launch = 9;
 
                                     @Override
                                     public void run() {
+                                        // Print seconds
                                         System.out.println("T-Minus " + launch + " seconds");
+                                        // Take one away
                                         launch--;
                                     }
-                                }, 0, 1000);
+                                }, 0, 1000); // No delay, 1000 ms = 1s
+                                // After 9 seconds, stop timer.
                                 new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {
+                                        // Display message
                                         System.out.println("Prepare for launch.");
+                                        // Stop timer
                                         timer.cancel();
                                     }
-                                }, 9000);
+                                }, 9000); // 9000 ms = 9s
                                 System.out.println("Launching...");
-
+                                // Moon time.
                                 timer.scheduleAtFixedRate(new TimerTask() {
+                                    // Preset all required values
                                     boolean blown = false;
                                     int distance = 0;
                                     int blow;
@@ -702,35 +726,50 @@ public class Main {
 
                                     @Override
                                     public void run() {
+                                        // If the ship has not blown up
                                         while (!blown) {
+                                            // Increase distance by 10000m
                                             distance = distance + 10000;
+                                            // Increase speed by 9.81m/s (so 442.94 for 10000m)
                                             speed = speed + 442.94;
+                                            // Display stats
                                             System.out.println("The ship is currently at: " + distance + " meters.");
                                             System.out.println("The current speed is " + speed + " m/s.");
+                                            // Use rng for failure
                                             blow = (int) (Math.random() * 100 + 1);
+                                            // If rng = 2, blow up
                                             if (blow == 2) {
                                                 System.out.println("The ship blew up. No survivors.");
+                                                // Blown is true, cut loop
                                                 blown = true;
+                                                // Ship is no longer active
                                                 ship.setStat(false);
+                                                // Cancel timer
                                                 timer.cancel();
                                             }
                                         }
                                     }
                                 }, 0, 1000);
-
+                                // If blown up
                                 if (!ship.getStat()) {
+                                    // use for loop
                                     for (int i = 0; i < ship.getSize(); i++) {
+                                        // Loops through astros
                                         for (Astronaut astro : astros) {
-                                            if (astro.getName().equals(ship.getAstro(i))){
+                                            // If the astronaut's name is in the astro list
+                                            if (astro.getName().equals(ship.getAstro(i))) {
+                                                // Delete astronaut entirely
                                                 astro.astroDeleter();
                                                 astros.remove(astro.getID());
                                             }
                                         }
                                     }
+                                    // Delete ship
                                     ship.shipDeleter();
                                     space.remove(ship.getID());
+                                    break;
                                 }
-                                
+                                // Otherwise, if the ship exists still, stop after 7 seconds since we are now on the moon.
                                 new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {
@@ -738,16 +777,16 @@ public class Main {
                                         timer.cancel();
                                     }
                                 }, 7000);
-
+                                // Start moonwalk.
                                 System.out.println("Starting moonwalk. Be patient, this takes 30 seconds.");
 
                                 timer.scheduleAtFixedRate(new TimerTask() {
                                     @Override
                                     public void run() {
-                                        
+                                        // Nothin' here but me.
                                     }
                                 }, 0, 1000);
-
+                                // After 30 seconds, complete moonwalk.
                                 new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {
@@ -757,38 +796,67 @@ public class Main {
                                 }, 30000);
 
                                 timer.scheduleAtFixedRate(new TimerTask() {
+                                    // Start return to earth.
                                     int distance = 70000;
                                     double speed = 0;
+
                                     @Override
                                     public void run() {
+                                        // Decrease height by 10000m
                                         distance = distance - 10000;
+                                        // Add speed
                                         speed = speed + 442.94;
+                                        // Display stats
                                         System.out.println("Current altitude: " + distance + "m");
                                         System.out.println("Speed: " + speed + " m/s");
+                                        // Stop at 10000m
                                         if (distance == 10000) {
                                             timer.cancel();
                                         }
                                     }
                                 }, 0, 1000);
+
                                 timer.scheduleAtFixedRate(new TimerTask() {
+                                    // Parachuting time
                                     int distance = 10000;
                                     double speed = 7;
+
                                     @Override
                                     public void run() {
+                                        // remove 700m (7x100, 100 seconds.)
                                         distance = distance - 700;
                                         if (distance <= 0) {
+                                            // Once at the ground, astronauts have landed safely.
                                             System.out.println("All astronauts have landed safely.");
                                             timer.cancel();
                                         }
+                                        // Display stats.
                                         System.out.println("Current altitude: " + distance + "m");
                                         System.out.println("Speed: " + speed + " m/s");
                                     }
                                 }, 0, 1000);
-                                ship.setCurrent(0);
+                                // Remove 500 fuel.
+                                ship.setCurrent(ship.getCurrent() - 500);
+
+                            } else {
+                                // Else, display error message
+                                System.out.println("Not enough people on board.");
                             }
+                        } else {
+                            // Else, display error message.
+                            System.out.println("Not enough fuel. Please get the correct amount of fuel to proceed");
                         }
                     }
                 }
+                if (!found) {
+                    // If not found, display error
+                    System.out.println("Invalid input. Check for spelling errors.");
+                }
+                // reset all.
+                found = false;
+                input = " ";
+                option = ' ';
+
             }
         }
         // Close scanner.
