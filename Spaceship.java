@@ -59,6 +59,10 @@ public class Spaceship {
             System.err.println(e.getMessage());
         }
     }
+
+    public String getAstro(int i) {
+        return astroNames.get(i);
+    }
     // Refuel
     public String refuel(double amount) {
         // If possible, refuel the ship by requested amount.
@@ -86,6 +90,10 @@ public class Spaceship {
     public int getID() {
         return spacecraftID;
     }
+
+    public void setCurrent(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
     // Adds astronauts
     public void addAstro(String name) {
         // If there are not 10 astronauts on the ship already, then add.
@@ -109,6 +117,10 @@ public class Spaceship {
             // Loop and display all astronaut names
             System.out.println(astroNames.get(i));
         }
+    }
+
+    public int getSize() {
+        return astroNames.size() + 1;
     }
     // Show all info on the specified ship
     public void fullShow() {

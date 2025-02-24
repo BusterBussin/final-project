@@ -1,8 +1,11 @@
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Main {
 
@@ -19,11 +22,14 @@ public class Main {
     }
 
     public static void main(String args[]) {
-        //conects to database
+
+        Timer timer = new Timer();
+
+        // conects to database
         connect();
-        //url for database
+        // url for database
         String url = "jdbc:sqlite:spaceprogram.db";
-        //Astronaut table.
+        // Astronaut table.
         var createAstronautTable = "CREATE TABLE IF NOT EXISTS Astronauts (" +
                 "   id INTEGER PRIMARY KEY," +
                 "	AstroName text NOT NULL," +
@@ -94,6 +100,7 @@ public class Main {
         String email;
         long number;
         double rate;
+        // boolean blown;
         double weight;
         String kin;
         String shipName;
@@ -193,6 +200,7 @@ public class Main {
             System.out.println("Please select an option");
             System.out.println("A) Manage Astronauts");
             System.out.println("B) Manage Spaceships");
+            System.out.println("C) Launch");
             System.out.println("Z) Exit");
             // autoupper, takes the first letter
             option = scan.nextLine().toUpperCase().charAt(0);
@@ -212,7 +220,7 @@ public class Main {
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
                         case 'A':
-                        // Creates the astronaut
+                            // Creates the astronaut
                             System.out.println("Enter the name of the astronaut");
                             name = scan.nextLine();
                             System.out.println("Enter date of birth (Any format, preferably YYYY-MM-DD)");
@@ -285,21 +293,21 @@ public class Main {
                                             option = scan.nextLine().toUpperCase().charAt(0);
                                             switch (option) {
                                                 case 'A':
-                                                // Changes name
+                                                    // Changes name
                                                     System.out.println("Enter new name");
                                                     name = scan.nextLine();
                                                     astro.setName(name);
                                                     option = ' ';
                                                     break;
                                                 case 'B':
-                                                // Changes date of birth
+                                                    // Changes date of birth
                                                     System.out.print("Enter new DOB (preferred in 2000-01-01)");
                                                     dob = scan.nextLine();
                                                     astro.setDOB(dob);
                                                     option = ' ';
                                                     break;
                                                 case 'C':
-                                                // Changes serial number
+                                                    // Changes serial number
                                                     System.out.println("Enter new serial");
                                                     serial = scan.nextInt();
                                                     scan.nextLine();
@@ -307,14 +315,14 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'D':
-                                                // Changes address
+                                                    // Changes address
                                                     System.out.println("Enter new address");
                                                     address = scan.nextLine();
                                                     astro.setAddress(address);
                                                     option = ' ';
                                                     break;
                                                 case 'E':
-                                                // Changes email
+                                                    // Changes email
                                                     System.out.println("Enter email.");
                                                     email = scan.nextLine();
                                                     // check for @ symbol
@@ -326,7 +334,7 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'F':
-                                                // Change phone number
+                                                    // Change phone number
                                                     System.out.println(
                                                             "Enter phone number. (Enter without dashes or parantheses, will autoformat)");
                                                     numCheck = scan.nextLine();
@@ -342,7 +350,7 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'G':
-                                                // Change payrate
+                                                    // Change payrate
                                                     System.out.println("Enter payrate (In form 0.00)");
                                                     rate = scan.nextDouble();
                                                     scan.nextLine();
@@ -350,7 +358,7 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'H':
-                                                // Change weight
+                                                    // Change weight
                                                     System.out.println("Enter weight (In form 0.00, in pounds)");
                                                     weight = scan.nextDouble();
                                                     scan.nextLine();
@@ -358,17 +366,17 @@ public class Main {
                                                     option = ' ';
                                                     break;
                                                 case 'I':
-                                                // Change next of kin
+                                                    // Change next of kin
                                                     System.out.println("Enter next of kin's name");
                                                     kin = scan.nextLine();
                                                     astro.setKin(kin);
                                                     option = ' ';
                                                 case 'Z':
-                                                // Returns to main menu
+                                                    // Returns to main menu
                                                     System.out.println("Returning to main menu");
                                                     break;
                                                 default:
-                                                // If all else fails, give error.
+                                                    // If all else fails, give error.
                                                     System.out.println("invalid input.");
                                                     option = ' ';
                                                     break;
@@ -385,7 +393,8 @@ public class Main {
                         case 'D':
                             // Warn user.
                             System.out.println("THIS IS THE DELETION SERVICE. PLEASE REALLY CONSIDER YOUR NEXT MOVE.");
-                            System.out.println("Enter the name of the astronaut you would like to delete. Say cancel to cancel.");
+                            System.out.println(
+                                    "Enter the name of the astronaut you would like to delete. Say cancel to cancel.");
                             input = scan.nextLine();
                             // Cancel if told to
                             if (input.equalsIgnoreCase("cancel")) {
@@ -411,15 +420,16 @@ public class Main {
                             }
                             if (!found) {
                                 // If not found, error out.
-                                System.out.println("Astronaut name was invalid. Please check for spelling and capitalization.");
+                                System.out.println(
+                                        "Astronaut name was invalid. Please check for spelling and capitalization.");
                             }
 
                         case 'Z':
-                        // Returns to main menu.
+                            // Returns to main menu.
                             System.out.println("Returning to the main menu.");
                             break;
                         default:
-                        // user entered invalid option.
+                            // user entered invalid option.
                             System.out.println("Invalid option.");
                             break;
                     }
@@ -445,7 +455,7 @@ public class Main {
                     option = scan.nextLine().toUpperCase().charAt(0);
                     switch (option) {
                         case 'A':
-                        // Add spaceship process.
+                            // Add spaceship process.
                             System.out.println("Enter the spaceship name.");
                             shipName = scan.nextLine();
                             System.out.println("Enter the fuel cap.");
@@ -465,7 +475,7 @@ public class Main {
                             for (Spaceship ship : space) {
                                 // go through each spaceship object
                                 if (ship.getName().equalsIgnoreCase(input)) {
-                                    //if the name is equal to input, select this.
+                                    // if the name is equal to input, select this.
                                     // found is true.
                                     found = true;
                                     // display name
@@ -505,7 +515,7 @@ public class Main {
                                 }
                             }
                         case 'C':
-                        // Adding astronauts
+                            // Adding astronauts
                             // Prompt for spaceship name
                             System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
                             input = scan.nextLine();
@@ -545,12 +555,12 @@ public class Main {
                             }
                             break;
                         case 'D':
-                        // removing astronauts.
+                            // removing astronauts.
                             // Prompt for ship name
                             System.out.println("Enter the name of the spaceship. Say cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
-                                //Cancel.
+                                // Cancel.
                                 System.out.println("Cancelling.");
                                 // Found set to true to override error message.
                                 found = true;
@@ -571,7 +581,8 @@ public class Main {
                                                 ship.removeAstro(astro.getName());
                                                 // set found to true
                                                 found = true;
-                                                // set astronaut's ID to 0, the default number for astronauts with no spacecraft.
+                                                // set astronaut's ID to 0, the default number for astronauts with no
+                                                // spacecraft.
                                                 astro.setID(0);
                                             }
                                         }
@@ -585,7 +596,7 @@ public class Main {
                             }
                             break;
                         case 'E':
-                        // Ship info display.
+                            // Ship info display.
                             System.out.println("Enter name of ship, all for all ship info, or cancel to cancel.");
                             input = scan.nextLine();
                             if (input.equalsIgnoreCase("cancel")) {
@@ -621,12 +632,12 @@ public class Main {
                             }
                             break;
                         case 'Z':
-                        // Returns to main menu.
+                            // Returns to main menu.
                             System.out.println("Returning to the main menu.");
                             break;
 
                         default:
-                        // By default, show error.
+                            // By default, show error.
                             System.out.println("Invalid option.");
                             break;
                     }
@@ -634,6 +645,137 @@ public class Main {
                 // reset found and option.
                 found = false;
                 option = ' ';
+            }
+            while (option == 'C') {
+                found = false;
+                input = " ";
+                option = ' ';
+                System.out.println(
+                        "You are now in the launching process. If your designated ship is ready, launch. Cancel now to back out. (Y/N)");
+                option = scan.nextLine().toUpperCase().charAt(0);
+                while (option != 'Y' && option != 'N') {
+                    System.out.println("Not a valid option. Press Y to cancel or N to proceed.");
+                    option = scan.nextLine().toUpperCase().charAt(0);
+                }
+                if (option == 'Y') {
+                    System.out.println("Cancelling.");
+                    break;
+                }
+                System.out.println("Type the name of the spaceship needed. We will undergo checks for the spaceship.");
+                input = scan.nextLine();
+                for (Spaceship ship : space) {
+                    if (ship.getName().equals(input)) {
+                        System.out.println("Spaceship found.");
+                        found = true;
+                        System.out.println("Minimal fuel required: 500 lbs");
+                        System.out.println("spaceship fuel: " + ship.getCurrent() + " lbs");
+                        if (ship.getCurrent() >= 500) {
+                            System.out.println("Minimal capacity required: 3 people.");
+                            System.out.println("Spaceship Capacity: " + ship.getSize() + " people");
+                            if (ship.getSize() >= 3) {
+                                System.out.println(ship.getName() + "is ready for takeoff. Prepare the engine...");
+                                System.out.println("Engine prepared. Preparing for launch...");
+                                System.out.println("T-Minus 10 seconds");
+                                timer.scheduleAtFixedRate(new TimerTask() {
+                                    int launch = 9;
+
+                                    @Override
+                                    public void run() {
+                                        System.out.println("T-Minus " + launch + " seconds");
+                                        launch--;
+                                    }
+                                }, 0, 1000);
+                                new Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Prepare for launch.");
+                                        timer.cancel();
+                                    }
+                                }, 9000);
+                                System.out.println("Launching...");
+
+                                timer.scheduleAtFixedRate(new TimerTask() {
+                                    boolean blown = false;
+                                    int distance = 0;
+                                    int blow;
+                                    double speed = 0;
+
+                                    @Override
+                                    public void run() {
+                                        while (!blown) {
+                                            distance = distance + 10000;
+                                            speed = speed + 442.94;
+                                            System.out.println("The ship is currently at: " + distance + " meters.");
+                                            System.out.println("The current speed is " + speed + " m/s.");
+                                            blow = (int) (Math.random() * 100 + 1);
+                                            if (blow == 2) {
+                                                System.out.println("The ship blew up.");
+                                                blown = true;
+                                                timer.cancel();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }, 0, 1000);
+                                
+                                new Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("We have made it to the moon.");
+                                        timer.cancel();
+                                    }
+                                }, 7000);
+
+                                System.out.println("Starting moonwalk. Be patient, this takes 30 seconds.");
+
+                                timer.scheduleAtFixedRate(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        
+                                    }
+                                }, 0, 1000);
+
+                                new Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Spacewalk complete, time to return to earth.");
+                                        timer.cancel();
+                                    }
+                                }, 30000);
+
+                                timer.scheduleAtFixedRate(new TimerTask() {
+                                    int distance = 70000;
+                                    double speed = 0;
+                                    @Override
+                                    public void run() {
+                                        distance = distance - 10000;
+                                        speed = speed + 442.94;
+                                        System.out.println("Current altitude: " + distance + "m");
+                                        System.out.println("Speed: " + speed + " m/s");
+                                        if (distance == 10000) {
+                                            timer.cancel();
+                                        }
+                                    }
+                                }, 0, 1000);
+                                timer.scheduleAtFixedRate(new TimerTask() {
+                                    int distance = 10000;
+                                    double speed = 7;
+                                    @Override
+                                    public void run() {
+                                        distance = distance - 700;
+                                        if (distance <= 0) {
+                                            System.out.println("All astronauts have landed safely.");
+                                            timer.cancel();
+                                        }
+                                        System.out.println("Current altitude: " + distance + "m");
+                                        System.out.println("Speed: " + speed + " m/s");
+                                    }
+                                }, 0, 1000);
+                                ship.setCurrent(0);
+                            }
+                        }
+                    }
+                }
             }
         }
         // Close scanner.
