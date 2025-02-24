@@ -709,14 +709,27 @@ public class Main {
                                             System.out.println("The current speed is " + speed + " m/s.");
                                             blow = (int) (Math.random() * 100 + 1);
                                             if (blow == 2) {
-                                                System.out.println("The ship blew up.");
+                                                System.out.println("The ship blew up. No survivors.");
                                                 blown = true;
+                                                ship.setStat(false);
                                                 timer.cancel();
-                                                break;
                                             }
                                         }
                                     }
                                 }, 0, 1000);
+
+                                if (!ship.getStat()) {
+                                    for (int i = 0; i < ship.getSize(); i++) {
+                                        for (Astronaut astro : astros) {
+                                            if (astro.getName().equals(ship.getAstro(i))){
+                                                astro.astroDeleter();
+                                                astros.remove(astro.getID());
+                                            }
+                                        }
+                                    }
+                                    ship.shipDeleter();
+                                    space.remove(ship.getID());
+                                }
                                 
                                 new Timer().schedule(new TimerTask() {
                                     @Override

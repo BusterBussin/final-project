@@ -9,6 +9,7 @@ public class Spaceship {
     String shipName;
     double fuelCap;
     double currentFuel;
+    boolean status = true;
     // ArrayList for the names of astronauts
     ArrayList<String> astroNames = new ArrayList<>();
     // SQL Lines
@@ -20,6 +21,7 @@ public class Spaceship {
         fuelCap = rs.getDouble("maxFuel");
         currentFuel = rs.getDouble("currentFuel");
         spacecraftID = rs.getInt("id");
+        status = true;
     }
 
     // Creates new spaceship
@@ -27,6 +29,7 @@ public class Spaceship {
         this.shipName = shipName;
         this.fuelCap = fuelCap;
         currentFuel = 0;
+        status = true;
         //SQL Line
         sqlInput = "INSERT INTO Spacecraft(name, maxFuel, currentFuel) VALUES(?, ?, ?)";
         // Inputs info to SQL and saves.
@@ -62,6 +65,14 @@ public class Spaceship {
 
     public String getAstro(int i) {
         return astroNames.get(i);
+    }
+
+    public boolean getStat() {
+        return status;
+    }
+
+    public void setStat(boolean status) {
+        this.status = status;
     }
     // Refuel
     public String refuel(double amount) {
@@ -121,6 +132,22 @@ public class Spaceship {
 
     public int getSize() {
         return astroNames.size() + 1;
+    }
+
+    public void shipDeleter() {
+         // Line used to delete
+         sqlInput = "DELETE FROM Ships WHERE id = ?";
+         try (var conn = DriverManager.getConnection(url);
+              var pstmt = conn.prepareStatement(sqlInput)) {
+             pstmt.setInt(1, spacecraftID);
+ 
+             // execute the delete statement
+             pstmt.executeUpdate();
+ 
+         } catch (SQLException e) {
+             // If an error occurs, display error.
+             System.err.println(e.getMessage());
+         }
     }
     // Show all info on the specified ship
     public void fullShow() {
