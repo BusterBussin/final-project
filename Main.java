@@ -54,13 +54,15 @@ public class Main {
         // misc table
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
                 "   id INTEGER PRIMARY KEY," +
-                "   password INTEGER NOT NULL," +
-                "   logins INTEGER NOT NULL" +
+                "   password INTEGER DEFAULT 573219 CHECK (password = 573219)," +
+                "   logins INTEGER DEFAULT 0" +
                 ");";
         // sets attempts to 0
-        var addZeroAttempts = "INSERT INTO ...";
         // command to get all from astronaut table and combine with spaceship table
-        var getAllAstronauts = "SELECT * FROM Astronauts LEFT JOIN Ships ON Astronauts.spacecraftID=Ships.id;";
+        var getAllAstronauts = "SELECT Astronauts.*, Ships.id AS shipId, Ships.*\r\n" + //
+                "FROM Astronauts  \r\n" + //
+                "FULL JOIN Ships ON Astronauts.spacecraftID = Ships.id;\r\n" + //
+                "";
         // command to combine with spaceship table and combine with astronaut table
         var getAllSpace = "SELECT * FROM Ships LEFT JOIN Astronauts ON Ships.id=Astronauts.spacecraftID;";
         // command to get general table
@@ -81,6 +83,7 @@ public class Main {
             // create a new table
             stmt.execute(createAstronautTable);
             stmt.execute(createShipTable);
+            stmt.execute(createGeneralTable);
             // stmt.execute(createGeneralTable);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -136,13 +139,18 @@ public class Main {
                 var rs = stmt.executeQuery(getAllAstronauts)) {
 
             while (rs.next()) {
-                for (int i = 0; i < rs.getRow(); i++) {
+
+                if (rs.getInt("serial") == 0) {
+                    // Spacecraft
                     Spaceship loadSpace1 = new Spaceship(rs);
                     space.add(loadSpace1);
+                } else {
 
                     Astronaut loadAstro = new Astronaut(rs);
                     astros.add(loadAstro);
+
                 }
+
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -161,7 +169,7 @@ public class Main {
         // loads astronauts into designated ships, if they have one.
         for (Spaceship shipLoad : space) {
             for (Astronaut astroLoad : astros) {
-                if (shipLoad.getID() == astroLoad.getID()) {
+                if (shipLoad.getID() == astroLoad.spaceshipID) {
                     shipLoad.addAstro(astroLoad.getName());
                 }
             }
@@ -176,10 +184,8 @@ public class Main {
             try (var conn = DriverManager.getConnection(url);
                     var pstmt = conn.prepareStatement(sqlInput)) {
 
-                for (int i = 0; i < 3; i++) {
-                    pstmt.setInt(1, attempts);
-                    pstmt.executeUpdate();
-                }
+                pstmt.setInt(1, attempts);
+                pstmt.executeUpdate();
 
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -769,7 +775,8 @@ public class Main {
                                     space.remove(ship.getID());
                                     break;
                                 }
-                                // Otherwise, if the ship exists still, stop after 7 seconds since we are now on the moon.
+                                // Otherwise, if the ship exists still, stop after 7 seconds since we are now on
+                                // the moon.
                                 new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {

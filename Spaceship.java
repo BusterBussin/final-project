@@ -20,7 +20,7 @@ public class Spaceship {
         shipName = rs.getString("name");
         fuelCap = rs.getDouble("maxFuel");
         currentFuel = rs.getDouble("currentFuel");
-        spacecraftID = rs.getInt("id");
+        spacecraftID = rs.getInt("shipId");
         status = true;
     }
 
@@ -55,7 +55,7 @@ public class Spaceship {
                 var rs = stmt.executeQuery(sqlInput)) {
 
             while (rs.next()) {
-                spacecraftID = rs.getInt("id");
+                spacecraftID = rs.getInt("shipId");
             }
         } catch (SQLException e) {
             // If an error occurs, display error.
