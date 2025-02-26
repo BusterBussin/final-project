@@ -359,7 +359,7 @@ public class Astronaut {
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setInt(12, spaceshipID);
+                pstmt.setInt(1, spaceshipID);
                 pstmt.executeUpdate();
             }
 

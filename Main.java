@@ -1,11 +1,14 @@
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.*;
 
 public class Main {
 
@@ -21,9 +24,10 @@ public class Main {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
 
-        Timer timer = new Timer();
+        // Timer timer = new Timer();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
         // conects to database
         connect();
@@ -113,7 +117,10 @@ public class Main {
         double refuel;
         boolean status = false;
         String numCheck;
+        // Scanner
         Scanner scan = new Scanner(System.in);
+        // Ascii, to call ascii programs
+        Ascii ascii = new Ascii();
         // SELECT * FROM Astronauts LEFT JOIN spacecrafts.id on astronauts.spacecraftId;
         // two array lists, one for astronauts and one for spaceships
         ArrayList<Astronaut> astros = new ArrayList<>();
@@ -140,12 +147,18 @@ public class Main {
 
             while (rs.next()) {
 
-                if (rs.getInt("serial") == 0) {
-                    // Spacecraft
+                if (rs.getInt("serial") != 0 && rs.getInt("shipId") != 0) {
+                    // We have a spacecraft AND astronaut in one row
+                    Spaceship loadSpace1 = new Spaceship(rs);
+                    space.add(loadSpace1);
+                    Astronaut loadAstro = new Astronaut(rs);
+                    astros.add(loadAstro);
+                } else if (rs.getInt("serial") == 0) {
+                    // We have just a spacecraft
                     Spaceship loadSpace1 = new Spaceship(rs);
                     space.add(loadSpace1);
                 } else {
-
+                    // We have just an astronaut
                     Astronaut loadAstro = new Astronaut(rs);
                     astros.add(loadAstro);
 
@@ -696,74 +709,113 @@ public class Main {
                                 // Start launch
                                 System.out.println(ship.getName() + "is ready for takeoff. Prepare the engine...");
                                 System.out.println("Engine prepared. Preparing for launch...");
-                                // Start countdown
-                                System.out.println("T-Minus 10 seconds");
+                                // Start countdown, show ascii
+                                ascii.asciiLaunch();
                                 // Every second, count down one second
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    // Preset launch
-                                    int launch = 9;
+                                // timer.scheduleAtFixedRate(new TimerTask() {
+                                // // Preset launch
+                                // int launch = 9;
 
-                                    @Override
-                                    public void run() {
-                                        // Print seconds
-                                        System.out.println("T-Minus " + launch + " seconds");
-                                        // Take one away
-                                        launch--;
-                                    }
-                                }, 0, 1000); // No delay, 1000 ms = 1s
+                                // @Override
+                                // public void run() {
+                                // // Print seconds
+                                // System.out.println("T-Minus " + launch + " seconds");
+                                // // Take one away
+                                // launch--;
+                                // }
+                                // }, 0, 1000); // No delay, 1000 ms = 1s
+
+                                // Preset launch
+                                for (int i = 10; i >= 0; i--) {
+                                    // Print seconds
+                                    System.out.println("T-Minus " + i + " seconds");
+                                    // Take one away
+                                    Thread.sleep(1000);
+                                }
+
                                 // After 9 seconds, stop timer.
-                                new Timer().schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        // Display message
-                                        System.out.println("Prepare for launch.");
-                                        // Stop timer
-                                        timer.cancel();
-                                    }
-                                }, 9000); // 9000 ms = 9s
+                                // new Timer().schedule(new TimerTask() {
+                                // @Override
+                                // public void run() {
+                                // // Display message
+                                // System.out.println("Prepare for launch.");
+                                // // Stop timer
+                                // timer.cancel();
+                                // }
+                                // }, 9000); // 9000 ms = 9s
                                 System.out.println("Launching...");
-                                // Moon time.
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    // Preset all required values
+                                for (int i = 7; i >= 0; i--) {
                                     boolean blown = false;
                                     int distance = 0;
                                     int blow;
                                     double speed = 0;
-
-                                    @Override
-                                    public void run() {
-                                        // If the ship has not blown up
-                                        while (!blown) {
-                                            // Increase distance by 10000m
-                                            distance = distance + 10000;
-                                            // Increase speed by 9.81m/s (so 442.94 for 10000m)
-                                            speed = speed + 442.94;
-                                            // Display stats
-                                            System.out.println("The ship is currently at: " + distance + " meters.");
-                                            System.out.println("The current speed is " + speed + " m/s.");
-                                            // Use rng for failure
-                                            blow = (int) (Math.random() * 100 + 1);
-                                            // If rng = 2, blow up
-                                            if (blow == 2) {
-                                                System.out.println("The ship blew up. No survivors.");
-                                                // Blown is true, cut loop
-                                                blown = true;
-                                                // Ship is no longer active
-                                                ship.setStat(false);
-                                                // Cancel timer
-                                                timer.cancel();
-                                            }
+                                    // If the ship has not blown up
+                                    while (!blown) {
+                                        // Increase distance by 10000m
+                                        distance = distance + 10000;
+                                        // Increase speed by 9.81m/s (so 442.94 for 10000m)
+                                        speed = speed + 442.94;
+                                        // Display stats
+                                        System.out.println("The ship is currently at: " + distance + " meters.");
+                                        System.out.println("The current speed is " + speed + " m/s.");
+                                        // Use rng for failure
+                                        blow = (int) (Math.random() * 100 + 1);
+                                        // If rng = 2, blow up
+                                        if (blow == 2) {
+                                            System.out.println("The ship blew up. No survivors.");
+                                            // Blown is true, cut loop
+                                            blown = true;
+                                            // Ship is no longer active
+                                            ship.setStat(false);
                                         }
                                     }
-                                }, 0, 1000);
+                                    // Take one away
+                                    Thread.sleep(1000);
+                                }
+                                // Moon time.
+                                // timer.scheduleAtFixedRate(new TimerTask() {
+                                // // Preset all required values
+                                // boolean blown = false;
+                                // int distance = 0;
+                                // int blow;
+                                // double speed = 0;
+
+                                // @Override
+                                // public void run() {
+                                // // If the ship has not blown up
+                                // while (!blown) {
+                                // // Increase distance by 10000m
+                                // distance = distance + 10000;
+                                // // Increase speed by 9.81m/s (so 442.94 for 10000m)
+                                // speed = speed + 442.94;
+                                // // Display stats
+                                // System.out.println("The ship is currently at: " + distance + " meters.");
+                                // System.out.println("The current speed is " + speed + " m/s.");
+                                // // Use rng for failure
+                                // blow = (int) (Math.random() * 100 + 1);
+                                // // If rng = 2, blow up
+                                // if (blow == 2) {
+                                // System.out.println("The ship blew up. No survivors.");
+                                // // Blown is true, cut loop
+                                // blown = true;
+                                // // Ship is no longer active
+                                // ship.setStat(false);
+                                // // Cancel timer
+                                // timer.cancel();
+                                // }
+                                // }
+                                // }
+                                // }, 0, 1000);
                                 // If blown up
                                 if (!ship.getStat()) {
+                                    // Show blown
+                                    ascii.asciiBlow();
                                     // use for loop
-                                    for (int i = 0; i < ship.getSize(); i++) {
+                                    for (int j = 0; j < ship.getSize(); j++) {
                                         // Loops through astros
                                         for (Astronaut astro : astros) {
                                             // If the astronaut's name is in the astro list
-                                            if (astro.getName().equals(ship.getAstro(i))) {
+                                            if (astro.getName().equals(ship.getAstro(j))) {
                                                 // Delete astronaut entirely
                                                 astro.astroDeleter();
                                                 astros.remove(astro.getID());
@@ -775,73 +827,112 @@ public class Main {
                                     space.remove(ship.getID());
                                     break;
                                 }
+                                System.out.println("We have made it to the moon.");
                                 // Otherwise, if the ship exists still, stop after 7 seconds since we are now on
                                 // the moon.
-                                new Timer().schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        System.out.println("We have made it to the moon.");
-                                        timer.cancel();
-                                    }
-                                }, 7000);
-                                // Start moonwalk.
+                                // new Timer().schedule(new TimerTask() {
+                                // @Override
+                                // public void run() {
+                                // System.out.println("We have made it to the moon.");
+                                // timer.cancel();
+                                // }
+                                // }, 7000);
+                                // Show moon
+                                ascii.asciiMoon();
                                 System.out.println("Starting moonwalk. Be patient, this takes 30 seconds.");
+                                for (int k = 30; k >= 0; k--) {
 
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        // Nothin' here but me.
-                                    }
-                                }, 0, 1000);
-                                // After 30 seconds, complete moonwalk.
-                                new Timer().schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        System.out.println("Spacewalk complete, time to return to earth.");
-                                        timer.cancel();
-                                    }
-                                }, 30000);
+                                    // Take one away
+                                    Thread.sleep(1000);
+                                }
 
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    // Start return to earth.
+                                // Start moonwalk.
+
+                                // timer.scheduleAtFixedRate(new TimerTask() {
+                                // @Override
+                                // public void run() {
+                                // // Nothin' here but me.
+                                // }
+                                // }, 0, 1000);
+                                // // After 30 seconds, complete moonwalk.
+                                // new Timer().schedule(new TimerTask() {
+                                // @Override
+                                // public void run() {
+                                // System.out.println("Spacewalk complete, time to return to earth.");
+                                // timer.cancel();
+                                // }
+                                // }, 30000);
+                                // Show ship
+                                ascii.asciiShip();
+                                for (int l = 7; l >= 0; l--) {
                                     int distance = 70000;
                                     double speed = 0;
+                                    // Decrease height by 10000m
+                                    distance = distance - 10000;
+                                    // Add speed
+                                    speed = speed + 442.94;
+                                    // Display stats
+                                    System.out.println("Current altitude: " + distance + "m");
+                                    System.out.println("Speed: " + speed + " m/s");
+                                    // Stop at 10000m
+                                    // Take one away
+                                    Thread.sleep(1000);
+                                }
+                                // timer.scheduleAtFixedRate(new TimerTask() {
+                                // // Start return to earth.
+                                // int distance = 70000;
+                                // double speed = 0;
 
-                                    @Override
-                                    public void run() {
-                                        // Decrease height by 10000m
-                                        distance = distance - 10000;
-                                        // Add speed
-                                        speed = speed + 442.94;
-                                        // Display stats
-                                        System.out.println("Current altitude: " + distance + "m");
-                                        System.out.println("Speed: " + speed + " m/s");
-                                        // Stop at 10000m
-                                        if (distance == 10000) {
-                                            timer.cancel();
-                                        }
-                                    }
-                                }, 0, 1000);
+                                // @Override
+                                // public void run() {
+                                // // Decrease height by 10000m
+                                // distance = distance - 10000;
+                                // // Add speed
+                                // speed = speed + 442.94;
+                                // // Display stats
+                                // System.out.println("Current altitude: " + distance + "m");
+                                // System.out.println("Speed: " + speed + " m/s");
+                                // // Stop at 10000m
+                                // if (distance == 10000) {
+                                // timer.cancel();
+                                // }
+                                // }
+                                // }, 0, 1000);
 
-                                timer.scheduleAtFixedRate(new TimerTask() {
-                                    // Parachuting time
+                                // timer.scheduleAtFixedRate(new TimerTask() {
+                                // // Parachuting time
+                                // int distance = 10000;
+                                // double speed = 7;
+
+                                // @Override
+                                // public void run() {
+                                // // remove 700m (7x100, 100 seconds.)
+                                // distance = distance - 700;
+                                // if (distance <= 0) {
+                                // // Once at the ground, astronauts have landed safely.
+                                // System.out.println("All astronauts have landed safely.");
+                                // timer.cancel();
+                                // }
+                                // // Display stats.
+                                // System.out.println("Current altitude: " + distance + "m");
+                                // System.out.println("Speed: " + speed + " m/s");
+                                // }
+                                // }, 0, 1000);
+                                for (int k = 30; k >= 0; k--) {
                                     int distance = 10000;
                                     double speed = 7;
-
-                                    @Override
-                                    public void run() {
-                                        // remove 700m (7x100, 100 seconds.)
-                                        distance = distance - 700;
-                                        if (distance <= 0) {
-                                            // Once at the ground, astronauts have landed safely.
-                                            System.out.println("All astronauts have landed safely.");
-                                            timer.cancel();
-                                        }
-                                        // Display stats.
+                                    // remove 700m (7x100, 100 seconds.)
+                                    distance = distance - 700;
+                                    if (distance <= 0) {
+                                        // Once at the ground, astronauts have landed safely.
+                                        System.out.println("All astronauts have landed safely.");
+                                        // Take one away
+                                        Thread.sleep(1000);
+                                    } else {
                                         System.out.println("Current altitude: " + distance + "m");
                                         System.out.println("Speed: " + speed + " m/s");
                                     }
-                                }, 0, 1000);
+                                }
                                 // Remove 500 fuel.
                                 ship.setCurrent(ship.getCurrent() - 500);
 
