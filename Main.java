@@ -668,21 +668,17 @@ public class Main {
                                                 remove.setID(0);
                                             }
                                         }
-                                        // Delete the ship
                                         delete.shipDeleter();
                                         // Remove from arraylist
-                                        space.remove(delete.spacecraftID - 1);
+                                        for (int i = 0; i < space.size(); i++) {
+                                            if (space.get(i).spacecraftID == delete.spacecraftID) {
+                                                space.remove(i);
+                                            }
+                                        }
                                     }
                                 }
-                                // If found, update ID lists
-                                // Reason why only if found is because it doesn't matter if no spaceships were
-                                // deleted.
-                                if (found) {
-                                    for (Spaceship update : space) {
-                                        update.idGrab();
-                                    }
-                                    // Else, display error.
-                                } else if (!found) {
+                                // Error out if not found
+                                if (!found) {
                                     System.out.println("Spaceship not found, try again later.");
                                 }
                             }
@@ -875,5 +871,6 @@ public class Main {
         }
         // Close scanner.
         scan.close();
+        System.exit(0);
     }
 }
