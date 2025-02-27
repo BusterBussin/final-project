@@ -26,9 +26,6 @@ public class Main {
 
     public static void main(String args[]) throws InterruptedException {
 
-        // Timer timer = new Timer();
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
         // conects to database
         connect();
         // url for database
@@ -36,24 +33,24 @@ public class Main {
         // Astronaut table.
         var createAstronautTable = "CREATE TABLE IF NOT EXISTS Astronauts (" +
                 "   id INTEGER PRIMARY KEY," +
-                "	AstroName text NOT NULL," +
-                "   dob text NOT NULL," +
-                "   serial INTEGER NOT NULL," +
-                "   phone REAL NOT NULL," +
-                "   address text NOT NULL," +
-                "   email text NOT NULL," +
-                "   rate REAL NOT NULL," +
-                "   weight REAL NOT NULL," +
-                "   kin text NOT NULL," +
-                "   status BOOLEAN," +
+                "	AstroName text," +
+                "   dob text," +
+                "   serial INTEGER," +
+                "   phone REAL," +
+                "   address text," +
+                "   email text," +
+                "   rate REAL," +
+                "   weight REAL," +
+                "   kin text," +
+                "   status," +
                 "   spacecraftID INTEGER" +
                 ");";
         // Spaceship table
         var createShipTable = "CREATE TABLE IF NOT EXISTS Ships (" +
                 "   id INTEGER PRIMARY KEY," +
-                "	name text NOT NULL," +
-                "   maxFuel REAL NOT NULL," +
-                "   currentFuel REAL NOT NULL" +
+                "	name text," +
+                "   maxFuel REAL," +
+                "   currentFuel REAL" +
                 ");";
         // misc table
         var createGeneralTable = "CREATE TABLE IF NOT EXISTS General (" +
@@ -67,12 +64,8 @@ public class Main {
                 "FROM Astronauts  \r\n" + //
                 "FULL JOIN Ships ON Astronauts.spacecraftID = Ships.id;\r\n" + //
                 "";
-        // command to combine with spaceship table and combine with astronaut table
-        var getAllSpace = "SELECT * FROM Ships LEFT JOIN Astronauts ON Ships.id=Astronauts.spacecraftID;";
         // command to get general table
         var getAllGeneral = "SELECT * FROM General;";
-        // var getAstronautByEmail = "SELECT * Astronauts WHERE email =
-        // 'kruskiej@baisd.net'";
 
         try (var conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -88,7 +81,6 @@ public class Main {
             stmt.execute(createAstronautTable);
             stmt.execute(createShipTable);
             stmt.execute(createGeneralTable);
-            // stmt.execute(createGeneralTable);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -107,7 +99,6 @@ public class Main {
         String email;
         long number;
         double rate;
-        // boolean blown;
         double weight;
         String kin;
         String shipName;
@@ -121,24 +112,9 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         // Ascii, to call ascii programs
         Ascii ascii = new Ascii();
-        // SELECT * FROM Astronauts LEFT JOIN spacecrafts.id on astronauts.spacecraftId;
         // two array lists, one for astronauts and one for spaceships
         ArrayList<Astronaut> astros = new ArrayList<>();
         ArrayList<Spaceship> space = new ArrayList<>();
-        // try (var conn = DriverManager.getConnection(url);
-        // var stmt = conn.createStatement();
-        // var rs = stmt.executeQuery(getAllAstronauts)) {
-
-        // while (rs.next()) {
-
-        // for (int i = 0; i < rs.getRow(); i++) {
-        // Astronaut loadAstro = new Astronaut(rs);
-        // astros.add(loadAstro);
-        // }
-        // }
-        // } catch (SQLException e) {
-        // System.err.println(e.getMessage());
-        // }
 
         // gets all astronaut and ship information off of SQL.
         try (var conn = DriverManager.getConnection(url);
@@ -183,7 +159,7 @@ public class Main {
         for (Spaceship shipLoad : space) {
             for (Astronaut astroLoad : astros) {
                 if (shipLoad.getID() == astroLoad.spaceshipID) {
-                    shipLoad.addAstro(astroLoad.getName());
+                    shipLoad.addAstro(astroLoad.name);
                 }
             }
         }
@@ -193,7 +169,7 @@ public class Main {
             // add an attempt so it can no longer be seen
             attempts += 1;
             // save to SQL
-            sqlInput = "INSERT INTO General(logins) VALUES(?)";
+            sqlInput = "UPDATE General SET logins WHERE id = 1;";
             try (var conn = DriverManager.getConnection(url);
                     var pstmt = conn.prepareStatement(sqlInput)) {
 
@@ -301,11 +277,11 @@ public class Main {
                                 for (Astronaut astro : astros) {
                                     // Go through astros, find name.
                                     // If the astronaut name is the same as the input, trigger this.
-                                    if (astro.getName().equalsIgnoreCase(input)) {
+                                    if (astro.name.equalsIgnoreCase(input)) {
                                         // Found.
                                         found = true;
                                         while (option != 'Z') {
-                                            System.out.println("Editing astronaut: " + astro.getName());
+                                            System.out.println("Editing astronaut: " + astro.name);
                                             System.out.println("Select what to change.");
                                             System.out.println(
                                                     "A) Name\nB) Date of Birth\nC) Serial\nD) Address\nE) Email\nF) Phone Number\nG)Pay Rate\nH) Weight\nI) Kin\nF) Status\nZ) Quit");
@@ -425,7 +401,7 @@ public class Main {
                                 // Make i, autoset to 0
                                 int i = 0;
                                 for (Astronaut astro : astros) {
-                                    if (input.equals(astro.getName())) {
+                                    if (input.equals(astro.name)) {
                                         // Delete from SQL
                                         astro.astroDeleter();
                                         // Delete from arraylist.
@@ -435,6 +411,14 @@ public class Main {
                                     }
                                     // increase i
                                     i++;
+                                }
+                                // If found, update ID lists
+                                // Reason why only if found is because it doesn't matter if no astronauts were
+                                // deleted.
+                                if (found) {
+                                    for (Astronaut update : astros) {
+                                        update.idGrab();
+                                    }
                                 }
                             }
                             if (!found) {
@@ -469,6 +453,7 @@ public class Main {
                     System.out.println("C) Add Astronaut to Ship");
                     System.out.println("D) Remove Astronaut");
                     System.out.println("E) Show Info");
+                    System.out.println("F) Delete Ship");
                     System.out.println("Z) Quit");
                     // take input, autoupper at first letter
                     option = scan.nextLine().toUpperCase().charAt(0);
@@ -493,12 +478,12 @@ public class Main {
                             input = scan.nextLine();
                             for (Spaceship ship : space) {
                                 // go through each spaceship object
-                                if (ship.getName().equalsIgnoreCase(input)) {
+                                if (ship.shipName.equalsIgnoreCase(input)) {
                                     // if the name is equal to input, select this.
                                     // found is true.
                                     found = true;
                                     // display name
-                                    shipName = ship.getName();
+                                    shipName = ship.shipName;
                                     // display the current amount of fuel already in there.
                                     currentFuel = ship.getCurrent();
                                     // display the capacity.
@@ -547,17 +532,17 @@ public class Main {
                                 // scan space arraylist for a spaceship named as the input.
                                 for (Spaceship ship : space) {
                                     // If found
-                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                    if (ship.shipName.equalsIgnoreCase(input)) {
                                         // Prompt for astronaut name.
                                         System.out.println("Ship found. Enter the astronaut name.");
                                         input = scan.nextLine();
                                         // Search astros arraylist for the astronaut name.
                                         for (Astronaut astro : astros) {
-                                            if (astro.getName().equalsIgnoreCase(input)) {
+                                            if (astro.name.equalsIgnoreCase(input)) {
                                                 // If found, add to ship
                                                 System.out.println("Astronaut found. Adding to ship.");
                                                 // adds to ship
-                                                ship.addAstro(astro.getName());
+                                                ship.addAstro(astro.name);
                                                 // set found to true
                                                 found = true;
                                                 // sets spacecraftID to the ship's id for SQL saving.
@@ -587,17 +572,17 @@ public class Main {
                             } else {
                                 // Scan space arraylist to find spacecraft name matching the input
                                 for (Spaceship ship : space) {
-                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                    if (ship.shipName.equalsIgnoreCase(input)) {
                                         // if found, prompt for astronaut name.
                                         System.out.println("Ship found. Enter the astronaut name.");
                                         input = scan.nextLine();
                                         // scan astros arraylist for astronaut name matching with input.
                                         for (Astronaut astro : astros) {
-                                            if (astro.getName().equalsIgnoreCase(input)) {
+                                            if (astro.name.equalsIgnoreCase(input)) {
                                                 // If found, remove astronaut from ship.
                                                 System.out.println("Astronaut found. Deleting from ship.");
                                                 // Remove astronaut from ship's name arraylist
-                                                ship.removeAstro(astro.getName());
+                                                ship.removeAstro(astro.name);
                                                 // set found to true
                                                 found = true;
                                                 // set astronaut's ID to 0, the default number for astronauts with no
@@ -636,7 +621,7 @@ public class Main {
                                 // Scan ships that match with the input
                                 for (Spaceship ship : space) {
                                     // Find ship that matches
-                                    if (ship.getName().equalsIgnoreCase(input)) {
+                                    if (ship.shipName.equalsIgnoreCase(input)) {
                                         // Show info for that ship, set found to true.
                                         ship.fullShow();
                                         found = true;
@@ -650,6 +635,57 @@ public class Main {
                                 System.out.println("Input does not match with any options. Check for misspells.");
                             }
                             break;
+
+                        case 'F':
+                            // Warn user
+                            System.out.println(
+                                    "THIS IS THE DELETION SERVICE. IF THIS IS NOT WHERE YOU WANT TO BE, BACK OUT NOW.");
+                            System.out.println("Y TO CANCEL, N TO PROCEED");
+                            option = scan.nextLine().toUpperCase().charAt(0);
+                            // Run this while the input doesn't match.
+                            while (option != 'Y' && option != 'N') {
+                                System.out.println("Not a valid option, please try again.");
+                                option = scan.nextLine().toUpperCase().charAt(0);
+                            }
+                            // If yes, cancel
+                            if (option == 'Y') {
+                                System.out.println("Cancelling...");
+                                break;
+                                // Else, follow through
+                            } else {
+                                System.out.println("Please enter the name of the ship to delete.");
+                                input = scan.nextLine();
+                                // Scan the arraylist for a matching ship
+                                for (Spaceship delete : space) {
+                                    if (delete.shipName.equals(input)) {
+                                        // Found the ship
+                                        found = true;
+                                        System.out.println("Deleting, please be patient.");
+                                        // Set all astronaut spacecraft IDs to zero if they were on the ship, since the
+                                        // ship isn't existent anymore.
+                                        for (Astronaut remove : astros) {
+                                            if (remove.spaceshipID == delete.spacecraftID) {
+                                                remove.setID(0);
+                                            }
+                                        }
+                                        // Delete the ship
+                                        delete.shipDeleter();
+                                        // Remove from arraylist
+                                        space.remove(delete.spacecraftID - 1);
+                                    }
+                                }
+                                // If found, update ID lists
+                                // Reason why only if found is because it doesn't matter if no spaceships were
+                                // deleted.
+                                if (found) {
+                                    for (Spaceship update : space) {
+                                        update.idGrab();
+                                    }
+                                    // Else, display error.
+                                } else if (!found) {
+                                    System.out.println("Spaceship not found, try again later.");
+                                }
+                            }
                         case 'Z':
                             // Returns to main menu.
                             System.out.println("Returning to the main menu.");
@@ -691,14 +727,14 @@ public class Main {
                 // Find spaceship
                 for (Spaceship ship : space) {
                     // If found
-                    if (ship.getName().equals(input)) {
+                    if (ship.shipName.equals(input)) {
                         System.out.println("Spaceship found.");
                         // Set found to true
                         found = true;
                         // Start checks
                         // Check 1: Fuel
                         System.out.println("Minimal fuel required: 500 lbs");
-                        System.out.println("spaceship fuel: " + ship.getCurrent() + " lbs");
+                        System.out.println("spaceship fuel: " + ship.currentFuel + " lbs");
                         // If it lines up, proceed
                         if (ship.getCurrent() >= 500) {
                             // Check 2: People
@@ -707,23 +743,11 @@ public class Main {
                             // If good, proceed
                             if (ship.getSize() >= 3) {
                                 // Start launch
-                                System.out.println(ship.getName() + "is ready for takeoff. Prepare the engine...");
+                                System.out.println(ship.shipName + " is ready for takeoff. Prepare the engine...");
                                 System.out.println("Engine prepared. Preparing for launch...");
                                 // Start countdown, show ascii
                                 ascii.asciiLaunch();
                                 // Every second, count down one second
-                                // timer.scheduleAtFixedRate(new TimerTask() {
-                                // // Preset launch
-                                // int launch = 9;
-
-                                // @Override
-                                // public void run() {
-                                // // Print seconds
-                                // System.out.println("T-Minus " + launch + " seconds");
-                                // // Take one away
-                                // launch--;
-                                // }
-                                // }, 0, 1000); // No delay, 1000 ms = 1s
 
                                 // Preset launch
                                 for (int i = 10; i >= 0; i--) {
@@ -732,17 +756,6 @@ public class Main {
                                     // Take one away
                                     Thread.sleep(1000);
                                 }
-
-                                // After 9 seconds, stop timer.
-                                // new Timer().schedule(new TimerTask() {
-                                // @Override
-                                // public void run() {
-                                // // Display message
-                                // System.out.println("Prepare for launch.");
-                                // // Stop timer
-                                // timer.cancel();
-                                // }
-                                // }, 9000); // 9000 ms = 9s
                                 System.out.println("Launching...");
                                 for (int i = 7; i >= 0; i--) {
                                     boolean blown = false;
@@ -772,40 +785,7 @@ public class Main {
                                     // Take one away
                                     Thread.sleep(1000);
                                 }
-                                // Moon time.
-                                // timer.scheduleAtFixedRate(new TimerTask() {
-                                // // Preset all required values
-                                // boolean blown = false;
-                                // int distance = 0;
-                                // int blow;
-                                // double speed = 0;
 
-                                // @Override
-                                // public void run() {
-                                // // If the ship has not blown up
-                                // while (!blown) {
-                                // // Increase distance by 10000m
-                                // distance = distance + 10000;
-                                // // Increase speed by 9.81m/s (so 442.94 for 10000m)
-                                // speed = speed + 442.94;
-                                // // Display stats
-                                // System.out.println("The ship is currently at: " + distance + " meters.");
-                                // System.out.println("The current speed is " + speed + " m/s.");
-                                // // Use rng for failure
-                                // blow = (int) (Math.random() * 100 + 1);
-                                // // If rng = 2, blow up
-                                // if (blow == 2) {
-                                // System.out.println("The ship blew up. No survivors.");
-                                // // Blown is true, cut loop
-                                // blown = true;
-                                // // Ship is no longer active
-                                // ship.setStat(false);
-                                // // Cancel timer
-                                // timer.cancel();
-                                // }
-                                // }
-                                // }
-                                // }, 0, 1000);
                                 // If blown up
                                 if (!ship.getStat()) {
                                     // Show blown
@@ -815,7 +795,7 @@ public class Main {
                                         // Loops through astros
                                         for (Astronaut astro : astros) {
                                             // If the astronaut's name is in the astro list
-                                            if (astro.getName().equals(ship.getAstro(j))) {
+                                            if (astro.name.equals(ship.getAstro(j))) {
                                                 // Delete astronaut entirely
                                                 astro.astroDeleter();
                                                 astros.remove(astro.getID());
@@ -828,40 +808,16 @@ public class Main {
                                     break;
                                 }
                                 System.out.println("We have made it to the moon.");
-                                // Otherwise, if the ship exists still, stop after 7 seconds since we are now on
-                                // the moon.
-                                // new Timer().schedule(new TimerTask() {
-                                // @Override
-                                // public void run() {
-                                // System.out.println("We have made it to the moon.");
-                                // timer.cancel();
-                                // }
-                                // }, 7000);
+
                                 // Show moon
                                 ascii.asciiMoon();
+                                // Start moonwalk.
                                 System.out.println("Starting moonwalk. Be patient, this takes 30 seconds.");
                                 for (int k = 30; k >= 0; k--) {
 
                                     // Take one away
                                     Thread.sleep(1000);
                                 }
-
-                                // Start moonwalk.
-
-                                // timer.scheduleAtFixedRate(new TimerTask() {
-                                // @Override
-                                // public void run() {
-                                // // Nothin' here but me.
-                                // }
-                                // }, 0, 1000);
-                                // // After 30 seconds, complete moonwalk.
-                                // new Timer().schedule(new TimerTask() {
-                                // @Override
-                                // public void run() {
-                                // System.out.println("Spacewalk complete, time to return to earth.");
-                                // timer.cancel();
-                                // }
-                                // }, 30000);
                                 // Show ship
                                 ascii.asciiShip();
                                 for (int l = 7; l >= 0; l--) {
@@ -878,46 +834,6 @@ public class Main {
                                     // Take one away
                                     Thread.sleep(1000);
                                 }
-                                // timer.scheduleAtFixedRate(new TimerTask() {
-                                // // Start return to earth.
-                                // int distance = 70000;
-                                // double speed = 0;
-
-                                // @Override
-                                // public void run() {
-                                // // Decrease height by 10000m
-                                // distance = distance - 10000;
-                                // // Add speed
-                                // speed = speed + 442.94;
-                                // // Display stats
-                                // System.out.println("Current altitude: " + distance + "m");
-                                // System.out.println("Speed: " + speed + " m/s");
-                                // // Stop at 10000m
-                                // if (distance == 10000) {
-                                // timer.cancel();
-                                // }
-                                // }
-                                // }, 0, 1000);
-
-                                // timer.scheduleAtFixedRate(new TimerTask() {
-                                // // Parachuting time
-                                // int distance = 10000;
-                                // double speed = 7;
-
-                                // @Override
-                                // public void run() {
-                                // // remove 700m (7x100, 100 seconds.)
-                                // distance = distance - 700;
-                                // if (distance <= 0) {
-                                // // Once at the ground, astronauts have landed safely.
-                                // System.out.println("All astronauts have landed safely.");
-                                // timer.cancel();
-                                // }
-                                // // Display stats.
-                                // System.out.println("Current altitude: " + distance + "m");
-                                // System.out.println("Speed: " + speed + " m/s");
-                                // }
-                                // }, 0, 1000);
                                 for (int k = 30; k >= 0; k--) {
                                     int distance = 10000;
                                     double speed = 7;

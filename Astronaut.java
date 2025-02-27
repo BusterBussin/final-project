@@ -25,6 +25,7 @@ public class Astronaut {
     String sqlInput;
     int spaceshipID;
     int id;
+
     // Constructor that takes everything from the tables
     public Astronaut(ResultSet rs) throws SQLException {
         name = rs.getString("AstroName");
@@ -50,6 +51,7 @@ public class Astronaut {
         spaceshipID = rs.getInt("spacecraftID");
         id = rs.getInt("id");
     }
+
     // Constructor for inputs given by user
     public Astronaut(String name, String dob, int serial, String address, String email, long number, double rate,
             double weight, String kin, boolean status) {
@@ -101,6 +103,7 @@ public class Astronaut {
         // Grab the ID after entering data.
         idGrab();
     }
+
     // ID grabbing
     public void idGrab() {
         try (var conn = DriverManager.getConnection(url);
@@ -112,100 +115,100 @@ public class Astronaut {
                 id = rs.getInt("id");
             }
         } catch (SQLException e) {
-            
+
             System.err.println(e.getMessage());
         }
     }
+
     // Setting name
     public void setName(String name) {
         this.name = name;
         // String for SQL
-        sqlInput = "INSERT INTO Astronauts(AstroName) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET AstroName = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(2, name);
+                pstmt.setString(1, name);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting date of birth
     public void setDOB(String dob) {
         this.dob = dob;
         // String for SQL
-        sqlInput = "INSERT INTO Astronauts(dob) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET dob = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(3, dob);
+                pstmt.setString(1, dob);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Set serial
     public void setSerial(int serial) {
         this.serial = serial;
         // SQL string
-        sqlInput = "INSERT INTO Astronauts(serial) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET serial = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setInt(4, serial);
+                pstmt.setInt(1, serial);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting address
     public void setAddress(String address) {
         this.address = address;
         // You already know.
-        sqlInput = "INSERT INTO Astronauts(address) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET address = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(6, address);
-                pstmt.executeUpdate();
-            }
+            pstmt.setString(1, address);
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting email
     public void setEmail(String email) {
         this.email = email;
         // String for SQL
-        sqlInput = "INSERT INTO Astronauts(email) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET email = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(7, email);
+                pstmt.setString(1, email);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting phone number
     public void setPhone(long number) {
         this.number = number;
@@ -215,14 +218,13 @@ public class Astronaut {
                 (number / 10000) % 1000,
                 number % 10000);
         // String for SQL
-        sqlInput = "INSERT INTO Astronauts(phone) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET phone = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(5, phoneNum);
+                pstmt.setString(1, phoneNum);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
@@ -235,68 +237,67 @@ public class Astronaut {
         // Format rate
         formattedRate = String.format("%1$,10.2f", rate);
         realRate = "$" + formattedRate;
-        sqlInput = "INSERT INTO Astronauts(rate) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET rate = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(8, realRate);
+                pstmt.setDouble(1, rate);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // setting weight
     public void setWeight(double weight) {
         this.weight = weight;
         // format weight
         formattedWeight = String.format("%.2f lbs", weight);
-        //SQL line
-        sqlInput = "INSERT INTO Astronauts(weight) VALUES(?)";
+        // SQL line
+        sqlInput = "UPDATE Astronauts SET weight = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(9, formattedWeight);
-                pstmt.executeUpdate();
-            }
+            pstmt.setDouble(1, weight);
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting next of kin
     public void setKin(String kin) {
         this.kin = kin;
         // SQL line
-        sqlInput = "INSERT INTO Astronauts(kin) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET kin = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
-                pstmt.setString(10, kin);
+                pstmt.setString(1, kin);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Setting status
     public void setStatus(boolean status) {
         this.status = status;
         // SQL line
-        sqlInput = "INSERT INTO Astronauts(status) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET status = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
             for (int i = 0; i < 3; i++) {
-                pstmt.setBoolean(11, status);
+                pstmt.setBoolean(1, status);
                 pstmt.executeUpdate();
             }
 
@@ -305,42 +306,52 @@ public class Astronaut {
             System.err.println(e.getMessage());
         }
     }
+
     // Returns the name
     public String getName() {
         return name;
     }
+
     // Returns date of birth
     public String getDOB() {
         return dob;
     }
+
     // Returns serial
     public int getSerial() {
         return serial;
     }
+
     // Returns address
     public String getAddress() {
         return address;
     }
+
     // Returns email
     public String getEmail() {
         return email;
     }
+
     // Returns phone
     public String getPhone() {
         return phoneNum;
     }
+
     // Returns weight
     public String getWeight() {
         return formattedWeight;
     }
+
     // Returns rate
     public String getPayRate() {
         return formattedRate;
     }
+
     // Returns kin name
     public String getKin() {
         return kin;
     }
+
     // Returns status
     public String getStatus() {
         // If the astronaut is in space
@@ -350,28 +361,30 @@ public class Astronaut {
         // If astronaut is not in space
         return "Astronaut is on Earth";
     }
+
     // Sets spacecraft id
     public void setID(int spaceshipID) {
         this.spaceshipID = spaceshipID;
         // SQL line
-        sqlInput = "INSERT INTO Astronauts(spacecraftID) VALUES(?)";
+        sqlInput = "UPDATE Astronauts SET spacecraftID = ? WHERE ID = " + id + ";";
         try (var conn = DriverManager.getConnection(url);
                 var pstmt = conn.prepareStatement(sqlInput)) {
 
-            for (int i = 0; i < 3; i++) {
                 pstmt.setInt(1, spaceshipID);
                 pstmt.executeUpdate();
-            }
+            
 
         } catch (SQLException e) {
             // If an error occurs, display error.
             System.err.println(e.getMessage());
         }
     }
+
     // Returns ID
     public int getID() {
         return spaceshipID;
     }
+
     // Gets current ID
     public int SQLDelete() {
         try (var conn = DriverManager.getConnection(url);
@@ -386,6 +399,7 @@ public class Astronaut {
         }
         return id;
     }
+
     // Returns all info
     public String toString() {
         return "Name: " + name +
@@ -399,12 +413,13 @@ public class Astronaut {
                 "\nNext of Kin: " + kin +
                 "\nStatus: " + getStatus();
     }
+
     // Deletes astronaut from SQL
-    public void astroDeleter() {   
+    public void astroDeleter() {
         // Line used to delete
         sqlInput = "DELETE FROM Astronauts WHERE id = ?";
         try (var conn = DriverManager.getConnection(url);
-             var pstmt = conn.prepareStatement(sqlInput)) {
+                var pstmt = conn.prepareStatement(sqlInput)) {
             pstmt.setInt(1, id);
 
             // execute the delete statement
