@@ -723,7 +723,7 @@ public class Main {
                 // Find spaceship
                 for (Spaceship ship : space) {
                     // If found
-                    if (ship.shipName.equals(input)) {
+                    if (ship.getName().equals(input)) {
                         System.out.println("Spaceship found.");
                         // Set found to true
                         found = true;
@@ -753,13 +753,14 @@ public class Main {
                                     Thread.sleep(1000);
                                 }
                                 System.out.println("Launching...");
-                                for (int i = 7; i >= 0; i--) {
-                                    boolean blown = false;
-                                    int distance = 0;
-                                    int blow;
-                                    double speed = 0;
+                                boolean blown = false;
+                                int distance = 0;
+                                int blow;
+                                double speed = 0;
+                                for (int i = 6; i >= 0; i--) {
+
                                     // If the ship has not blown up
-                                    while (!blown) {
+                                    if (!blown) {
                                         // Increase distance by 10000m
                                         distance = distance + 10000;
                                         // Increase speed by 9.81m/s (so 442.94 for 10000m)
@@ -777,9 +778,8 @@ public class Main {
                                             // Ship is no longer active
                                             ship.setStat(false);
                                         }
+                                        Thread.sleep(1000);
                                     }
-                                    // Take one away
-                                    Thread.sleep(1000);
                                 }
 
                                 // If blown up
@@ -816,35 +816,36 @@ public class Main {
                                 }
                                 // Show ship
                                 ascii.asciiShip();
-                                for (int l = 7; l >= 0; l--) {
-                                    int distance = 70000;
-                                    double speed = 0;
+                                distance = 70000;
+                                speed = 0;
+                                for (int i = 7; i >= 0; i--) {
+
                                     // Decrease height by 10000m
+                                    if (distance != 10000) {
                                     distance = distance - 10000;
                                     // Add speed
                                     speed = speed + 442.94;
                                     // Display stats
                                     System.out.println("Current altitude: " + distance + "m");
                                     System.out.println("Speed: " + speed + " m/s");
+                                    }
                                     // Stop at 10000m
                                     // Take one away
                                     Thread.sleep(1000);
                                 }
-                                for (int k = 30; k >= 0; k--) {
-                                    int distance = 10000;
-                                    double speed = 7;
+                                distance = 10000;
+                                speed = 7;
+                                for (int k = 11; k >= 0; k--) {
+
                                     // remove 700m (7x100, 100 seconds.)
                                     distance = distance - 700;
-                                    if (distance <= 0) {
-                                        // Once at the ground, astronauts have landed safely.
-                                        System.out.println("All astronauts have landed safely.");
-                                        // Take one away
-                                        Thread.sleep(1000);
-                                    } else {
+                                    if (distance > 0) {
                                         System.out.println("Current altitude: " + distance + "m");
                                         System.out.println("Speed: " + speed + " m/s");
                                     }
+                                    Thread.sleep(1000);
                                 }
+                                System.out.println("All astronauts have landed safely.");
                                 // Remove 500 fuel.
                                 ship.setCurrent(ship.getCurrent() - 500);
 
@@ -858,6 +859,10 @@ public class Main {
                         }
                     }
                 }
+                    
+                        
+                    
+                // NOTE: CUT HERE.
                 if (!found) {
                     // If not found, display error
                     System.out.println("Invalid input. Check for spelling errors.");
