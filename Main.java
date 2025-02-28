@@ -126,7 +126,15 @@ public class Main {
                 if (rs.getInt("serial") != 0 && rs.getInt("shipId") != 0) {
                     // We have a spacecraft AND astronaut in one row
                     Spaceship loadSpace1 = new Spaceship(rs);
+                    if (space.size() != 0) {
+                    for (Spaceship check : space) {
+                        if (!loadSpace1.getName().equals(check.getName())) {
+                            space.add(loadSpace1);
+                        }
+                    }
+                } else {
                     space.add(loadSpace1);
+                }
                     Astronaut loadAstro = new Astronaut(rs);
                     astros.add(loadAstro);
                 } else if (rs.getInt("serial") == 0) {
@@ -822,12 +830,12 @@ public class Main {
 
                                     // Decrease height by 10000m
                                     if (distance != 10000) {
-                                    distance = distance - 10000;
-                                    // Add speed
-                                    speed = speed + 442.94;
-                                    // Display stats
-                                    System.out.println("Current altitude: " + distance + "m");
-                                    System.out.println("Speed: " + speed + " m/s");
+                                        distance = distance - 10000;
+                                        // Add speed
+                                        speed = speed + 442.94;
+                                        // Display stats
+                                        System.out.println("Current altitude: " + distance + "m");
+                                        System.out.println("Speed: " + speed + " m/s");
                                     }
                                     // Stop at 10000m
                                     // Take one away
@@ -859,9 +867,7 @@ public class Main {
                         }
                     }
                 }
-                    
-                        
-                    
+
                 // NOTE: CUT HERE.
                 if (!found) {
                     // If not found, display error
